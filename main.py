@@ -20,10 +20,12 @@ from openai import OpenAI
 
 # Specific imports from modules where only specific functions/classes are used
 from langchain.chains import QAGenerationChain, RetrievalQA
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
+# from langchain.chat_models import ChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import FAISS
+# from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 
 
 from prompts import *
@@ -1081,7 +1083,7 @@ with title1:
     
 with title2:
         
-    st.title("MediMate: GPT and Med Ed")
+    st.title("MediMate for Neurology")
 
     with st.expander('About MediMate - Important Disclaimer'):
         st.write("Author: David Liebovitz, MD, Northwestern University")
@@ -1091,7 +1093,7 @@ with title2:
         st.write("ALPHA version 1.0")
     st.info("With OpenAI announcement 11-6-2023, new model added: GPT-4-1106-preview. It's in beta and allows longer text inputs than GPT-4.")
 
-if check_password():
+if st.secrets["use_docker"] == "True" or check_password():
     
     openai.api_base = "https://openrouter.ai/api/v1"
     openai.api_key = st.secrets["OPENROUTER_API_KEY"]
@@ -1968,7 +1970,7 @@ if check_password():
                 with st.expander("Web Resources Summary", expanded=st.session_state.expanded):
                     st.info(f'Topic: {my_ask_for_websearch}',icon="🧐")
                     st.success(f'Your Response: **REVIEW CAREFULLY FOR ERRORS** \n\n {st.session_state.skim_output_text}', icon="🤖")      
-                    skim_download_str = f"{disclaimer}\n\Web Resources Summary: {my_ask_for_websearch}:\n\n{st.session_state.skim_output_text}"
+                    skim_download_str = f"{disclaimer}\nWeb Resources Summary: {my_ask_for_websearch}:\n\n{st.session_state.skim_output_text}"
                     st.download_button('Download', skim_download_str, key = 'skim_questions')
                     export_as_pdf = st.button("Create PDF version", key = "skim_pdf")
                     if export_as_pdf:
