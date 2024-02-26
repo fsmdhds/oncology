@@ -1073,6 +1073,7 @@ if "expanded" not in st.session_state:
    
 st.set_page_config(page_title='MediMate: GPT and Med Ed', layout = 'centered', page_icon = ':stethoscope:', initial_sidebar_state = 'auto')    
 title1, title2 = st.columns([1, 3])
+
 with title1:
 
     medimate_robot = Image.open('images/medimate_robot.png')
