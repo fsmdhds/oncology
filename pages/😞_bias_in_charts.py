@@ -201,7 +201,7 @@ def check_password():
 
 
 
-if check_password():
+if st.secrets["use_docker"] == "True" or check_password():
     
     if 'model_bias' not in st.session_state:
         st.session_state.model_bias = "openai/gpt-4"

@@ -77,7 +77,7 @@ with st.expander("How will this be useful in the future?"):
     st.markdown(image_gen_explanation)
 
 
-if check_password():
+if st.secrets["use_docker"] == "True" or check_password():
     # Main functionality of the app
     analyze_or_generate = st.radio("Do you want to analyze an image or generate an image?", ["Analyze", "Generate"])
     if analyze_or_generate == "Analyze":

@@ -421,7 +421,7 @@ def summarize_messages(messages):
 st.set_page_config(page_title='Interactive Teacher for Medical Topics!', layout = 'centered', page_icon = '🧑🏾‍🏫', initial_sidebar_state = 'auto')
 st.title("Interactive Teacher for Foundational Medical Topics!")
 
-if check_password():
+if st.secrets["use_docker"] == "True" or check_password():
     
     proceed = st.checkbox("Acknowledge - this tool should be used for foundational knowledge only. Use responsibly. Do not use to learn about the latest treatments.")
     
