@@ -1071,7 +1071,7 @@ if "skim_output_text" not in st.session_state:
 if "expanded" not in st.session_state:
     st.session_state["expanded"] = True
    
-st.set_page_config(page_title='MediMate: GPT and Med Ed', layout = 'centered', page_icon = ':stethoscope:', initial_sidebar_state = 'auto')    
+st.set_page_config(page_title='MediMate: for Neurology', layout = 'centered', page_icon = ':stethoscope:', initial_sidebar_state = 'auto')    
 title1, title2 = st.columns([1, 3])
 
 with title1:
