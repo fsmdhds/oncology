@@ -200,7 +200,7 @@ def extract_patient_response(text):
     patient_response = text[start:].strip()
 
     # Look for the phrase 'Educator Comment:' in the patient_response
-    end = patient_response.find('Educator Comment:')
+    end = patient_response.find('DDx:')
 
     # If 'Educator Comment:' is found, remove it and everything after it
     if end != -1:
