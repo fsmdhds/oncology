@@ -276,12 +276,12 @@ if "last_response" not in st.session_state:
 
 if st.secrets["use_docker"] == "True" or check_password2():
     st.info("Enter your questions at the bottom of the page or choose the Microphone option. You may ask multiple questions at once. Have fun practicing!")
-    system_context = st.radio("Select an AI patient who comes to the ED with:", ("abdominal pain", "chest pain", "bloody diarrhea", "random symptoms", "You choose!"), horizontal = True, index=0)
+    system_context = st.radio("Select an AI patient who comes to the ED with:", ("severe headache", "chest pain", "bloody diarrhea", "random symptoms", "You choose!"), horizontal = True, index=0)
     
 
         
-    if system_context == "abdominal pain":
-        template = abd_pain_pt_template
+    if system_context == "severe headache":
+        template = headache_pt_template
         voice = 'alloy'
 
     if system_context == "chest pain":

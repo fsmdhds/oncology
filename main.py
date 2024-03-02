@@ -1435,12 +1435,12 @@ if st.secrets["use_docker"] == "True" or check_password():
                     
 
         if task == "Annotate a patient result":
-            sample_report1 = st.sidebar.radio("Try a sample report:", ("Text box for your own content", "Sample 1 (lung CT)", "Sample 2 (ECG)", "Generate a sample report"))
-            if sample_report1 == "Sample 1 (lung CT)":
+            sample_report1 = st.sidebar.radio("Try a sample report:", ("Text box for your own content", "Sample 1 (Brain MR)", "Sample 2 (EEG)", "Generate a sample report"))
+            if sample_report1 == "Sample 1 (Brain MR)":
                 st.session_state.sample_report = report1
                 with col1:
                     st.write(report1)
-            elif sample_report1 == "Sample 2 (ECG)":
+            elif sample_report1 == "Sample 2 (EEG)":
                 st.session_state.sample_report = report2
                 with col1:
                     st.write(report2)
@@ -1450,7 +1450,7 @@ if st.secrets["use_docker"] == "True" or check_password():
             
             elif sample_report1 == "Generate a sample report":
                 with st.sidebar:
-                    type_of_report = st.text_area("Enter the patient report type to generate", placeholder= 'e.g., abd pelvic CT with pancratic lesion', height=100)
+                    type_of_report = st.text_area("Enter the patient report type to generate", placeholder= 'e.g., brain CT with microvascular changes', height=100)
                     submitted_result = ""
                     if st.sidebar.button("Generate Sample Report"):
                         with col1:
@@ -1660,7 +1660,7 @@ if st.secrets["use_docker"] == "True" or check_password():
         if pt_ed_health_literacy == "Advanced Medical Knowledge":
             pt_ed_content_sample = pt_ed_advanced_example
         
-        sample_topic = "dietary guidance for a patient with diabetes, kidney disease, hypertension, obesity, and CAD"
+        sample_topic = "dietary guidance for a patient with migraines, kidney disease, hypertension, obesity, and CAD"
         patient_ed_temp = st.session_state.temp
         my_ask_for_pt_ed = st.text_area("Generate patient education materials:", placeholder="e.g., dietary guidance needed for obesity", label_visibility='visible', height=100)
         my_ask_for_pt_ed = "Generate patient education materials for: " + my_ask_for_pt_ed.replace("\n", " ")
