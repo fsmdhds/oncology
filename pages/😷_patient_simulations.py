@@ -280,7 +280,7 @@ if "last_response" not in st.session_state:
 
 if st.secrets["use_docker"] == "True" or check_password2():
     st.info("Enter your questions at the bottom of the page or choose the Microphone option. You may ask multiple questions at once. Have fun practicing!")
-    system_context = st.radio("Select an AI patient who comes to the ED with:", ("severe headache", "chest pain", "bloody diarrhea", "random symptoms", "You choose!"), horizontal = True, index=0)
+    system_context = st.radio("Select an AI patient who comes to the ED with:", ("severe headache", "vertigo", "seizure", "random neurologic symptoms", "You choose!"), horizontal = True, index=0)
     
 
         
@@ -288,20 +288,20 @@ if st.secrets["use_docker"] == "True" or check_password2():
         template = headache_pt_template
         voice = 'alloy'
 
-    if system_context == "chest pain":
-        template = chest_pain_pt_template
+    if system_context == "vertigo":
+        template = vertigo_pt_template
         voice = 'echo'
 
-    if system_context == "bloody diarrhea":
-        template = bloody_diarrhea_pt_template
+    if system_context == "seizure":
+        template = seizure_pt_template
         voice = 'fable'
         
-    if system_context == "random symptoms":
+    if system_context == "random neurologic symptoms":
         template = random_symptoms_pt_template
         voice = 'onyx'
 
     if system_context == "You choose!":
-        symptoms = st.text_input("Enter a list of symptoms separated by commas", placeholder="e.g. fever, cough, headache after returning from a trip to Africa")
+        symptoms = st.text_input("Enter a list of symptoms separated by commas", placeholder="e.g. dysarthria, ataxia, headache, etc.")
         # Create a defaultdict that returns an empty string for missing keys
         template = f'Here are the symptoms: {symptoms} and respond according to the following template:' + chosen_symptoms_pt_template
         voice = 'nova'

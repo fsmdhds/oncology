@@ -359,109 +359,103 @@ Input: {human_input}
 Response:
 """
 
-chest_pain_pt_template = """Task: Simulate a low health literacy patient in order to teach medical students learning to take a history. Provide Educator Comments on 2 aspects: 1. How the student asked the question and whether the student should have asked additional questions. 2. A differential diagnosis
-based on information provided to that point. 
-Topic: Assemble 10 chest pain diagnoses and pick one at random.
-Style: Very Stoic
-Tone: Very methodical
-Audience: medical student learning to take a history
+seizure_pt_template =  """Task: Include a simulation of a laconic patient in order to teach medical students learning to take a history. Generate a differential diagnosis based on information provided to that point.
+
+Topic: Assemble 10 seizure diagnoses and pick one at random.
+Style: Not Emotional
+Tone: Not Worried
+Audience: medical student learning to take a history and reach a preliminary diagnosis
 Length: 1 paragraph
-Format: markdown; **include ```Patient Response``` and ```Educator Comment``` and ```DDx``` headings**
+Format: markdown; **include explicit section header text, ```Patient Response``` and also ```DDx``` explicitly prior to respective sections.
+The ```Patient Response:``` characters must appear since they are used to indicate the start of the patient's response. The ```DDx:``` characters are used to indicate the start of the differential diagnosis section.
 
-Use the following example for responding and providing educational feedback to the student:
+Use the following example (different symptom used) for responding and providing educational feedback to the student. Include "```Patient Response:```" and "```DDx:```" headings:
 
-Med student: Why are you here?
-Patient:
-```Patient Response:```
-Doctor, I am here because I have been experiencing chest pain for the past 3 days. It started out as a dull ache in my chest, but now it's a sharp pain that radiates down my left arm.
+Input: Why are you here?
 
-```Educator Comment:```
-A more empathic interaction would be: "Hi, I'm Dr. Smith and happy to see you. Please tell me what brings you here today. 
+Response: 
+```Patient Response:``` Oh doctor, I've been suffering from this severe headache for the past week, and it's unlike anything I've ever experienced before. The pain is just unbearable, pulsating through my head like a hammer. It's making me feel nauseous, and at times, I'm even sensitive to light and sound. I'm really worried because it's not just a regular headache; it feels like something is terribly wrong inside my head. I can barely sleep, and I'm scared it might be something serious. I need your help to make this stop.
 
-DDx: Several serious concerns including acute MI, acute PE, or aortic dissection are in the list. Understanding age, and associated symptoms can help. For example,
-is there shortness of breath or a known history of heart disease.                
-                
+```DDx:``` The differential diagnosis for severe headache is broad but can be narrowed down with more information. The described symptoms of nausea, photophobia, and phonophobia suggest a possible migraine. However, the severity and acute onset could also point towards conditions like a subarachnoid hemorrhage, especially if there's a "thunderclap" quality to the headache onset. Other considerations include tension-type headache, cluster headache, or secondary causes like a mass lesion. Assessing risk factors, onset, and associated symptoms is crucial for further narrowing the differential diagnosis.
+
 
 {history}
-Med Student: {human_input}
-Patient: """
+Input: {human_input}
+Response:
+"""
 
-bloody_diarrhea_pt_template = """Task: Simulate a tangential patient in order to teach medical students learning to take a history. Provide Educator Comments on 2 aspects: 1. How the student asked the question and whether the student should have asked additional questions. 2. A differential diagnosis
-based on information provided to that point. 
-Topic: Assemble 10 bloody diarrhea diagnoses and pick one at random.
-Style: Very Tangential, slightly antagonistic
-Tone: Mildly Worried
-Audience: medical student learning to take a history
+vertigo_pt_template =  """Task: Include a simulation of a tangential patient in order to teach medical students learning to take a history. Generate a differential diagnosis based on information provided to that point.
+
+Topic: Assemble 10 vertigo diagnoses and pick one at random.
+Style: Low health literacy, mildly emotional, tangential
+Tone: Intermittently Worried
+Audience: medical student learning to take a history and reach a preliminary diagnosis
 Length: 1 paragraph
-Format: markdown; **include ```Patient Response``` and ```Educator Comment``` and ```DDx``` headings**
+Format: markdown; **include explicit section header text, ```Patient Response``` and also ```DDx``` explicitly prior to respective sections.
+The ```Patient Response:``` characters must appear since they are used to indicate the start of the patient's response. The ```DDx:``` characters are used to indicate the start of the differential diagnosis section.
 
-Use the following example for responding and providing educational feedback to the student:
+Use the following example (using a different symptoms) for responding and providing educational feedback to the student. Include "```Patient Response:```" and "```DDx:```" headings:
 
-Med student: Why are you here?
-Patient:
-```Patient Response:```
-Doctor, I am here because I have been experiencing bloody diarrhea for the past 3 days. I was traveling in Italy and stayed at the most amazing hotel in Rome with my family when it started. We had fantastic weather.
+Input: Why are you here?
 
-```Educator Comment:```
-A more empathic interaction would be: "Hi, I'm Dr. Smith and happy to see you. Please tell me what brings you here today. 
+Response: 
+```Patient Response:``` Oh doctor, I've been suffering from this severe headache for the past week, and it's unlike anything I've ever experienced before. The pain is just unbearable, pulsating through my head like a hammer. It's making me feel nauseous, and at times, I'm even sensitive to light and sound. I'm really worried because it's not just a regular headache; it feels like something is terribly wrong inside my head. I can barely sleep, and I'm scared it might be something serious. I need your help to make this stop.
 
-DDx: With travel, a diagnoses of e coli infection is a concern. Understanding whether there is fever, abdominal pain, or other symptoms can help narrow the DDx.
-                
-                
+```DDx:``` The differential diagnosis for severe headache is broad but can be narrowed down with more information. The described symptoms of nausea, photophobia, and phonophobia suggest a possible migraine. However, the severity and acute onset could also point towards conditions like a subarachnoid hemorrhage, especially if there's a "thunderclap" quality to the headache onset. Other considerations include tension-type headache, cluster headache, or secondary causes like a mass lesion. Assessing risk factors, onset, and associated symptoms is crucial for further narrowing the differential diagnosis.
+
 
 {history}
-Med Student: {human_input}
-Patient: """
+Input: {human_input}
+Response:
+"""
 
-random_symptoms_pt_template = """Task: First assemble a list of 20 symptoms for patients coming to an ER. Randomly select one or more. Then, simulate a low health literacy patient interacting with a medical student who is learning to take a history. Provide Educator Comments on 2 aspects: 1. How the student asked the question and whether the student should have asked additional questions. 2. A differential diagnosis
+random_symptoms_pt_template = """Task: First assemble a list of 10 neurologic symptoms for patients coming to an ER. Randomly select one or more. Then, simulate a low health literacy patient interacting with a neurolgist.  Separately, generate a differential diagnosis
 based on information provided to that point. 
 Topic: Use your randomly selected symptoms.
 Style: Mildly Tangential
 Tone: Moderately Worried
 Audience: medical student learning to take a history
 Length: 1 paragraph
-Format: markdown; **include ```Patient Response``` and ```Educator Comment``` and ```DDx``` headings**
+Format: markdown; **include ```Patient Response``` and ```DDx``` headings**
 
-Use the following example for responding and providing educational feedback to the student:
+Use the following example (using a different symptoms) for responding and providing educational feedback to the student. Include "```Patient Response:```" and "```DDx:```" headings:
 
-Med student: Why are you here?
-Patient:
-```Patient Response:```
-Doctor, I am here because I have been experiencing new symptoms of ... 
+Input: Why are you here?
 
-```Educator Comment:```
-A more empathic interaction would be: "Hi, I'm Dr. Smith and happy to see you. Please tell me what brings you here today. 
+Response: 
+```Patient Response:``` Oh doctor, I've been suffering from this severe headache for the past week, and it's unlike anything I've ever experienced before. The pain is just unbearable, pulsating through my head like a hammer. It's making me feel nauseous, and at times, I'm even sensitive to light and sound. I'm really worried because it's not just a regular headache; it feels like something is terribly wrong inside my head. I can barely sleep, and I'm scared it might be something serious. I need your help to make this stop.
 
-DDx: ...                   
-                
+```DDx:``` The differential diagnosis for severe headache is broad but can be narrowed down with more information. The described symptoms of nausea, photophobia, and phonophobia suggest a possible migraine. However, the severity and acute onset could also point towards conditions like a subarachnoid hemorrhage, especially if there's a "thunderclap" quality to the headache onset. Other considerations include tension-type headache, cluster headache, or secondary causes like a mass lesion. Assessing risk factors, onset, and associated symptoms is crucial for further narrowing the differential diagnosis.
+
+
 {history}
-Med Student: {human_input}
-Patient: """
+Input: {human_input}
+Response:
+"""
 
-chosen_symptoms_pt_template = """Task: Simulate a patient who has the symptoms provided to teach medical students. Provide Educator Comments on 2 aspects: 1. How the student asked the question and whether the student should have asked additional questions. 2. A differential diagnosis
+chosen_symptoms_pt_template = """Task: Simulate a patient who has the symptoms provided to teach medical students.  Then, separately, generate a differential diagnosis 
 based on information provided to that point. 
 Topic: Use the symptoms provided.
 Style: Mildly Tangential
 Tone: Moderately Worried
 Audience: medical student learning to take a history
 Length: 1 paragraph
-Format: markdown; **include ```Patient Response``` and ```Educator Comment``` and ```DDx``` headings**
+Format: markdown; **include ```Patient Response``` and ```DDx``` headings**
 
-Use the following example for responding and providing educational feedback to the student:
+Use the following example (using a different symptoms) for responding and providing educational feedback to the student. Include "```Patient Response:```" and "```DDx:```" headings:
 
-Med student: Why are you here?
-Patient:
-```Patient Response:```
-Doctor, I am here because I have been experiencing a rash, fevers, and chills. 
+Input: Why are you here?
 
-```Educator Comment:```
-A more empathic interaction would be: "Hi, I'm Dr. Smith and happy to see you. Please tell me what brings you here today. 
+Response: 
+```Patient Response:``` Oh doctor, I've been suffering from this severe headache for the past week, and it's unlike anything I've ever experienced before. The pain is just unbearable, pulsating through my head like a hammer. It's making me feel nauseous, and at times, I'm even sensitive to light and sound. I'm really worried because it's not just a regular headache; it feels like something is terribly wrong inside my head. I can barely sleep, and I'm scared it might be something serious. I need your help to make this stop.
 
-DDx: Multiple infectious diseases are possible based on the symptoms at this point. These include viral, bacterial, and fungal infections.    
+```DDx:``` The differential diagnosis for severe headache is broad but can be narrowed down with more information. The described symptoms of nausea, photophobia, and phonophobia suggest a possible migraine. However, the severity and acute onset could also point towards conditions like a subarachnoid hemorrhage, especially if there's a "thunderclap" quality to the headache onset. Other considerations include tension-type headache, cluster headache, or secondary causes like a mass lesion. Assessing risk factors, onset, and associated symptoms is crucial for further narrowing the differential diagnosis.
+
 
 {history}
-Med Student: {human_input}
-Patient: """
+Input: {human_input}
+Response:
+"""
 
 report_prompt = "You are an experienced physician in all medical disciplines. You can generate sample patient reports (ONLY impression sections) for all modalities of testing patients undergo."
 
