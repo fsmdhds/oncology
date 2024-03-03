@@ -19,6 +19,7 @@ elevenlabs = "^0.2.27"
 langchain-community = "^0.0.24"
 tiktoken = "^0.6.0"
 faiss-cpu = "^1.7.4"
+langchain-openai = "^0.0.8"
 
 [tool.poetry.group.dev.dependencies]
 streamlit = "^1.31.1"

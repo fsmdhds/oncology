@@ -1,9 +1,12 @@
 from langchain.chains import LLMChain
-from langchain.llms import OpenAI
+# from langchain.llms import OpenAI
+from langchain_community.llms import OpenAI
 # from langchain.chat_models import ChatOpenAI
-from langchain_community.chat_models import ChatOpenAI
+# from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
-from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
+# from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
+from langchain_community.chat_message_histories import StreamlitChatMessageHistory
 from langchain.prompts import PromptTemplate
 from audio_recorder_streamlit import audio_recorder
 import streamlit as st
@@ -70,6 +73,7 @@ def talk_stream(model, voice, input):
     input= input,
     )
     response.stream_to_file("last_message.mp3")
+    # response.with_streaming_response.method("last_message.mp3")
 
 
 
@@ -167,7 +171,7 @@ def check_password2():
             st.session_state["password_correct"] = False
 
     if "password_correct" not in st.session_state:
-        # First run, show input for password.
+        # First invoke, show input for password.
         if not using_docker:
             st.text_input(
                 "Password", type="password", on_change=password_entered, key="password"
@@ -347,10 +351,13 @@ if st.secrets["use_docker"] == "True" or check_password2():
     
         if prompt := st.chat_input():
             st.chat_message("user").write(prompt)
-            # Note: new messages are saved to history automatically by Langchain during run
+            # Note: new messages are saved to history automatically by Langchain during invoke
             openai.api_base = "https://api.openai.com/v1"
             openai.api_key = st.secrets["OPENAI_API_KEY"]
-            response = llm_chain.run(prompt)
+            response = llm_chain.invoke(prompt)
+            # j_response = json.loads(response)
+            response = response["text"]
+            # st.write(f'The Response is: {response}')
             st.session_state.last_response = response
             st.chat_message("assistant").write(response)
             play = True
@@ -377,8 +384,9 @@ if st.secrets["use_docker"] == "True" or check_password2():
             # if st.sidebar.button("Send Audio"):
             prompt = transcribe_audio(audio_file_path)
             st.chat_message("user").write(prompt)
-            # Note: new messages are saved to history automatically by Langchain during run
-            response = llm_chain.run(prompt)
+            # Note: new messages are saved to history automatically by Langchain during invoke
+            response = llm_chain.invoke(prompt)
+            response = response["text"]
             st.session_state.last_response = response
             st.chat_message("assistant").write(response)
             play = True
@@ -392,7 +400,7 @@ if st.secrets["use_docker"] == "True" or check_password2():
     if create_hpi := st.sidebar.button("Create HPI (Wait until you have enough history.)"):    
         openai.api_base = "https://api.openai.com/v1"
         openai.api_key = st.secrets["OPENAI_API_KEY"]    
-        hpi = llm_chain.run(hpi_prompt)
+        hpi = llm_chain.invoke(hpi_prompt)
         st.sidebar.write(hpi)
             # clear_session_state_except_password_correct()
             # st.session_state["last_response"] = "Patient Response: I can't believe I'm in the Emergency Room feeling sick!"
