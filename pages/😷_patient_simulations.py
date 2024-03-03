@@ -31,7 +31,7 @@ from using_docker import using_docker
 
 st.set_page_config(page_title="AI Patients", page_icon="📖")
 st.title("📖 Chat with AI Patients")
-st.write("This uses the GPT-3.5-16K Model to allow for lengthier conversations. It is still in beta testing. Please contact David Liebovitz, MD if you have any questions or feedback.")
+st.write("This uses the GPT-3.5 Model to allow for lengthier conversations. It is still in beta testing. Please contact David Liebovitz, MD if you have any questions or feedback.")
 
 def autoplay_local_audio(filepath: str):
     # Read the audio file from the local file system
@@ -340,7 +340,7 @@ if st.secrets["use_docker"] == "True" or check_password2():
 
 
     prompt = PromptTemplate(input_variables=["history", "human_input"], template=template)
-    llm_chain = LLMChain(llm=ChatOpenAI(openai_api_key=openai_api_key, model = "gpt-3.5-turbo-1106"), prompt=prompt, memory=memory)
+    llm_chain = LLMChain(llm=ChatOpenAI(openai_api_key=openai_api_key, model = "gpt-3.5-turbo"), prompt=prompt, memory=memory)
 
     # Render current messages from StreamlitChatMessageHistory
     for msg in msgs.messages:
