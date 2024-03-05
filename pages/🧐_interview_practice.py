@@ -255,7 +255,7 @@ if st.secrets["use_docker"] == "True" or check_password2():
     msgs_interview = StreamlitChatMessageHistory(key="langchain_messages_interview")
     memory = ConversationBufferMemory(chat_memory=msgs_interview)
     if len(msgs_interview.messages) == 0:
-        msgs_interview.add_ai_message("Hi, I'm Dr. Smith! Nice to meet you!")
+        msgs_interview.add_assistant_message("Hi, I'm Dr. Smith! Nice to meet you!")
 
     # view_messages = st.expander("View the message contents in session state")
 
