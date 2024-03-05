@@ -32,14 +32,15 @@ client = OpenAI()
 st.set_page_config(page_title="Interview Practice!", page_icon="🧐")
 st.title("🧐 Interview Practice")
 
-def generate_feedback(prompt = interview_feedback, transcript = '', model = "gpt-4-turbo-preview"):
+def convert_messages_to_json(messages):
+    return [{"role": msg.role, "content": msg.content} for msg in messages]
+
+def generate_feedback(prompt = interview_feedback, messages = [], model = "gpt-4-turbo-preview"):
     client = OpenAI()
+    messages_json = convert_messages_to_json(messages)
     feedback_response = client.chat.completions.create(
         model=model,
-        messages=[
-                {"role": "system", "content": prompt},
-                {"role": "user", "content": transcript}
-            ],
+        messages=messages_json,
         stream=False,
         )
     feedback_str = feedback_response.choices[0].message.content
@@ -321,7 +322,7 @@ if st.secrets["use_docker"] == "True" or check_password2():
 
     provide_interview_feedback = st.sidebar.button("Provide Feedback")
     if provide_interview_feedback:
-        feedback = generate_feedback(transcript = msgs_interview.messages)
+        feedback = generate_feedback(messages = msgs_interview.messages)
         with st.sidebar:
             st.write(msgs_interview.messages)
             st.write(feedback)
