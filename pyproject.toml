@@ -5,6 +5,7 @@ description = "Interactive LLM tools for Neurology Practices"
 authors = ["David Liebovitz <DavidL@northwestern.edu>"]
 license = "MIT"
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "~3.11"
