@@ -33,7 +33,7 @@ st.set_page_config(page_title="Interview Practice!", page_icon="🧐")
 st.title("🧐 Interview Practice")
 
 def convert_messages_to_json(messages):
-    return [{"role": msg.role, "content": msg.content} for msg in messages]
+    return [{"role": msg.type, "content": msg.content} for msg in messages]
 
 def generate_feedback(prompt = interview_feedback, messages = [], model = "gpt-4-turbo-preview"):
     client = OpenAI()
