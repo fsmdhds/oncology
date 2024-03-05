@@ -35,12 +35,14 @@ st.title("🧐 Interview Practice")
 def convert_messages_to_json(messages):
     return [{"role": msg.type, "content": msg.content} for msg in messages]
 
-def generate_feedback(prompt = interview_feedback, messages = [], model = "gpt-4-turbo-preview"):
+def generate_feedback(prompt = interview_feedback, conversation = '', model = "gpt-3.5-turbo"):
     client = OpenAI()
-    messages_json = convert_messages_to_json(messages)
+    messages = [{"role": "system", "content": prompt},
+                {"role": "user", "content": f'Transcript for user feedback: {conversation}'}
+                ]
     feedback_response = client.chat.completions.create(
         model=model,
-        messages=messages_json,
+        messages=messages,
         stream=False,
         )
     feedback_str = feedback_response.choices[0].message.content
@@ -255,7 +257,7 @@ if st.secrets["use_docker"] == "True" or check_password2():
     msgs_interview = StreamlitChatMessageHistory(key="langchain_messages_interview")
     memory = ConversationBufferMemory(chat_memory=msgs_interview)
     if len(msgs_interview.messages) == 0:
-        msgs_interview.add_assistant_message("Hi, I'm Dr. Smith! Nice to meet you!")
+        msgs_interview.add_ai_message("Hi, I'm Dr. Smith! Nice to meet you!")
 
     # view_messages = st.expander("View the message contents in session state")
 
@@ -322,7 +324,8 @@ if st.secrets["use_docker"] == "True" or check_password2():
 
     provide_interview_feedback = st.sidebar.button("Provide Feedback")
     if provide_interview_feedback:
-        feedback = generate_feedback(messages = msgs_interview.messages)
+        str_memory = str(memory)
+        feedback = generate_feedback(conversation = str_memory)
         with st.sidebar:
             st.write(msgs_interview.messages)
             st.write(feedback)
