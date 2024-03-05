@@ -36,7 +36,8 @@ def convert_messages_to_json(messages):
     return [{"role": msg.type, "content": msg.content} for msg in messages]
 
 def generate_feedback(prompt = interview_feedback, conversation = '', model = "gpt-3.5-turbo"):
-    client = OpenAI()
+    # client = OpenAI()
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     messages = [{"role": "system", "content": prompt},
                 {"role": "user", "content": f'Transcript for user feedback: {conversation}'}
                 ]
