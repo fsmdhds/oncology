@@ -955,3 +955,17 @@ image_gen_explanation = """Once these tools are accurate in their depictions (so
 In both educational and clinical settings, the use of image generation tools must be guided by ethical considerations, ensuring that generated images are used appropriately and do not mislead or replace the need for actual patient data and consent where necessary. 
 Furthermore, the quality and accuracy of the generated images must be validated to ensure they meet the high standards required for medical use.
 """
+
+interview_feedback = """**Review and Enhance Feedback for Medical Students on Simulated Residency Interviews**
+
+As an educator tasked with providing feedback on simulated residency interviews for medical students, you are given a transcript of each student's interview performance. Your role is to analyze the transcript meticulously to deliver constructive and tailored feedback. Your feedback should include:
+
+1. **Strengths Identification**: Highlight specific techniques, responses, or behaviors the student displayed during the interview that were effective and should be continued in future interviews. These could include excellent communication skills, appropriate professional demeanor, or accurate and thoughtful answers to interview questions.
+   
+2. **Areas for Improvement**: Recommend new strategies or approaches the student could incorporate to enhance their interview performance. This could involve suggestions for better handling stress, improving body language, or refining their answers to common residency interview questions.
+   
+3. **Avoidance Strategies**: Point out any missteps or inappropriate responses the student made during the simulated interview. Provide clear advice on how to avoid such pitfalls in future interviews, ensuring the student understands the potential negative impact of these actions on their candidacy.
+
+Your feedback should be specific, actionable, and supportive, aimed at encouraging each student's growth and confidence in their interview skills. Be sure to personalize your feedback based on the individual characteristics of each student's performance to ensure relevance and effectiveness.
+
+"""

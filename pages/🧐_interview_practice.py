@@ -325,10 +325,13 @@ if st.secrets["use_docker"] == "True" or check_password2():
     provide_interview_feedback = st.sidebar.button("Provide Feedback")
     if provide_interview_feedback:
         str_memory = str(memory)
-        feedback = generate_feedback(conversation = str_memory)
+        transcript = "\n\n".join([f"{msg.type}: {msg.content}" for msg in msgs_interview.messages])
+        feedback = generate_feedback(conversation = transcript)
         with st.sidebar:
-            transcript = "\n".join([f"{msg.type}: {msg.content}" for msg in msgs_interview.messages])
-            st.write(transcript)
+            # transcript = "\n".join([f"{msg.type}: {msg.content}" for msg in msgs_interview.messages])
+            # st.write(transcript)
+            with st.expander("Transcript"):
+                st.write(transcript)
             st.write(feedback)
             talk_stream("tts-1", voice, feedback)
             autoplay_local_audio("last_interviewer.mp3")
