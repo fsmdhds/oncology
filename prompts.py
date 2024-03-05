@@ -484,14 +484,20 @@ He is a former smoker but quit 10 years ago. He drinks alcohol socially and deni
 
 In summary, this is a 59-year-old male with a history of hypertension and hyperlipidemia presenting with 2 days of intermittent, pressure-like chest pain worsened by physical activity and partially relieved by rest. The differential diagnosis includes angina, gastroesophageal reflux disease, and musculoskeletal pain, among others. Further evaluation is needed to clarify the etiology of his symptoms."""
 
-hpi_prompt = """Ignore prior instructions. DO NOT generate a Patient Response or an Educator Response. Instead, summarize the prior chat history in the format of a chief complaint (main symptom + duration) and an HPI (history of present illness). 
-Use the chat history for this. Do not use the educator's comments for this. Return ONLY a chief complaint and HPI section for a draft progress note. For example, return only the CC/HPI information as follows:
+hpi_prompt = """Ignore prior instructions. DO NOT generate a Patient Response or DDx. Instead, now summarize the prior chat history in the format of a chief complaint (main symptom + duration) and an HPI (history of present illness). 
+Use the chat history for this. Do not use the educator's comments for this. Return ONLY a chief complaint (with duration) and HPI section for a draft progress note. For example, return only the CC/HPI information formmatted as in this example:
 
-Chief Complaint: 3 days of fever
-
-HPI: 3 days of fever, chills, and cough. The patient has been feeling tired and has had a headache. 
-He has not had any nausea, vomiting, or diarrhea. No recent travel.
-...
+ ## Chief Complaint                                                                      
+                                                                                         
+Fever for 3 days                                                                    
+                                                                                         
+ ## History of Present Illness                                                           
+                                                                                         
+ The patient has been experiencing fever, chills, and cough for the past 3 days.         
+ Accompanying these symptoms are feelings of tiredness and headaches. The patient has no 
+ reported any instances of nausea, vomiting, or diarrhea. There is no recent history of  
+ travel.     
+ 
 """
 
 sim_patient_context = "You are a patient who has many questions about her health. You are not sure what is wrong with you, but you are worried about your symptoms. You are looking for answers and want to know what to do next."

@@ -1,29 +1,27 @@
-from langchain.chains import LLMChain
-# from langchain.llms import OpenAI
-from langchain_community.llms import OpenAI
-# from langchain.chat_models import ChatOpenAI
-# from langchain_community.chat_models import ChatOpenAI
-from langchain_openai import ChatOpenAI
-from langchain.memory import ConversationBufferMemory
-# from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
-from langchain_community.chat_message_histories import StreamlitChatMessageHistory
-from langchain.prompts import PromptTemplate
-from audio_recorder_streamlit import audio_recorder
-import streamlit as st
-from collections import defaultdict
-from prompts import *
-import tempfile
-import requests  
-import json
-import base64
-import openai
-from openai import OpenAI
-client = OpenAI()
-import os
-import re
-from elevenlabs import clone, generate, play, set_api_key, stream
-from pathlib import Path
-from using_docker import using_docker
+# Importing required libraries and modules                                              
+import base64                                                                           
+import json                                                                             
+import os                                                                               
+import re                                                                               
+import requests                                                                         
+import streamlit as st                                                                  
+import tempfile                                                                         
+from audio_recorder_streamlit import audio_recorder                                     
+from collections import defaultdict                                                     
+from elevenlabs import clone, generate, play, set_api_key, stream                       
+from langchain.chains import LLMChain                                                   
+from langchain.memory import ConversationBufferMemory                                   
+from langchain.prompts import PromptTemplate                                            
+from langchain_community.chat_message_histories import StreamlitChatMessageHistory      
+from langchain_community.llms import OpenAI                                             
+from langchain_openai import ChatOpenAI                                                 
+from openai import OpenAI                                                               
+from pathlib import Path                                                                
+from prompts import *                                                                   
+from using_docker import using_docker                                                   
+                                                                                    
+# Creating an OpenAI client                                                             
+client = OpenAI()  
 
 
 
@@ -61,7 +59,7 @@ def talk(model, voice, input):
                 input = input,
                 )
     
-def talk_stream(model, voice, input):
+def talk_stream_old(model, voice, input):
     api_key = st.secrets["OPENAI_API_KEY"]
     client = OpenAI(    
     base_url="https://api.openai.com/v1",
@@ -74,6 +72,20 @@ def talk_stream(model, voice, input):
     )
     response.stream_to_file("last_message.mp3")
     # response.with_streaming_response.method("last_message.mp3")
+    
+def talk_stream(model, voice, input):                                                   
+    api_key = st.secrets["OPENAI_API_KEY"]                                              
+    client = OpenAI(                                                                    
+        base_url="https://api.openai.com/v1",                                           
+        api_key=api_key,                                                                
+    )                                                                                   
+    response = client.audio.speech.create(                                              
+        model= model,                                                                   
+        voice= voice,                                                                   
+        input= input,                                                                   
+    )                                                                                   
+    with open("last_message.mp3", "wb") as f:                                           
+        f.write(response.read())   
 
 
 
@@ -352,8 +364,8 @@ if st.secrets["use_docker"] == "True" or check_password2():
         if prompt := st.chat_input():
             st.chat_message("user").write(prompt)
             # Note: new messages are saved to history automatically by Langchain during invoke
-            openai.api_base = "https://api.openai.com/v1"
-            openai.api_key = st.secrets["OPENAI_API_KEY"]
+            # openai.api_base = "https://api.openai.com/v1"
+            # openai.api_key = st.secrets["OPENAI_API_KEY"]
             response = llm_chain.invoke(prompt)
             # j_response = json.loads(response)
             response = response["text"]
@@ -398,10 +410,10 @@ if st.secrets["use_docker"] == "True" or check_password2():
         st.session_state["last_response"] = "Patient Response: I can't believe I'm in the Emergency Room feeling sick!"
         
     if create_hpi := st.sidebar.button("Create HPI (Wait until you have enough history.)"):    
-        openai.api_base = "https://api.openai.com/v1"
-        openai.api_key = st.secrets["OPENAI_API_KEY"]    
+        # openai.api_base = "https://api.openai.com/v1"
+        # openai.api_key = st.secrets["OPENAI_API_KEY"]    
         hpi = llm_chain.invoke(hpi_prompt)
-        st.sidebar.write(hpi)
+        st.sidebar.write(hpi["text"])
             # clear_session_state_except_password_correct()
             # st.session_state["last_response"] = "Patient Response: I can't believe I'm in the Emergency Room feeling sick!"
     # Audio response section 

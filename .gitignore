@@ -7,3 +7,4 @@ out/
 .gitignore
 last_message.mp3
 last_interviewer.mp3
+.aider*
