@@ -1,28 +1,49 @@
-from langchain.chains import LLMChain
-from langchain.llms import OpenAI
-# from langchain.chat_models import ChatOpenAI
-from langchain_community.chat_models import ChatOpenAI
-from langchain.memory import ConversationBufferMemory
-from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
-from langchain.prompts import PromptTemplate
-from audio_recorder_streamlit import audio_recorder
-import streamlit as st
-from collections import defaultdict
-from prompts import *
-import tempfile
-import requests
-import json
-import base64
+
 import openai
-import os
-import re
-# from elevenlabs import clone, generate, play, set_api_key, stream
-from using_docker import using_docker
+
+# Importing required libraries and modules                                              
+import base64                                                                           
+import json                                                                             
+import os                                                                               
+import re                                                                               
+import requests                                                                         
+import streamlit as st                                                                  
+import tempfile                                                                         
+from audio_recorder_streamlit import audio_recorder                                     
+from collections import defaultdict                                                     
+from elevenlabs import clone, generate, play, set_api_key, stream                       
+from langchain.chains import LLMChain                                                   
+from langchain.memory import ConversationBufferMemory                                   
+from langchain.prompts import PromptTemplate                                            
+from langchain_community.chat_message_histories import StreamlitChatMessageHistory      
+# from langchain_community.llms import OpenAI                                             
+from langchain_openai import ChatOpenAI                                                 
+from openai import OpenAI                                                               
+from pathlib import Path                                                                
+from prompts import *                                                                   
+from using_docker import using_docker                                                   
+                                                                                    
+# Creating an OpenAI client                                                             
+client = OpenAI()  
+
 
 
 
 st.set_page_config(page_title="Interview Practice!", page_icon="🧐")
 st.title("🧐 Interview Practice")
+
+def generate_feedback(prompt = interview_feedback, transcript = '', model = "gpt-4-turbo-preview"):
+    client = OpenAI()
+    feedback_response = client.chat.completions.create(
+        model=model,
+        messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": transcript}
+            ],
+        stream=False,
+        )
+    feedback_str = feedback_response.choices[0].message.content
+    return feedback_str
 
 def talk_stream(model, voice, input):
     api_key = st.secrets["OPENAI_API_KEY"]
@@ -298,6 +319,15 @@ if st.secrets["use_docker"] == "True" or check_password2():
             st.session_state.last_response_interview = response
             st.chat_message("assistant").write(response)
 
+    provide_interview_feedback = st.sidebar.button("Provide Feedback")
+    if provide_interview_feedback:
+        feedback = generate_feedback(transcript = msgs_interview.messages)
+        with st.sidebar:
+            st.write(msgs_interview.messages)
+            st.write(feedback)
+            talk_stream("tts-1", voice, feedback)
+            autoplay_local_audio("last_interviewer.mp3")
+    
     clear_memory = st.sidebar.button("Start Over")
     if clear_memory:
         # st.session_state.langchain_messages = []
