@@ -366,8 +366,8 @@ def interactive_chat(messages, temperature, model, print = True):
         # model = 'gpt-3.5-turbo',
         model = model,
         messages = messages,
-        headers={ "HTTP-Referer": "https://fsm-gpt-med-ed.streamlit.app", # To identify your app
-            "X-Title": "GPT and Med Ed"},
+        # headers={ "HTTP-Referer": "https://fsm-gpt-med-ed.streamlit.app", # To identify your app
+        #     "X-Title": "GPT and Med Ed"},
         temperature = temperature,
         max_tokens = 1000,
         stream = True,   
