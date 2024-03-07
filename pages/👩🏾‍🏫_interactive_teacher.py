@@ -19,7 +19,7 @@ from using_docker import using_docker
 
 # Set a default model
 if "openai_model" not in st.session_state:
-    st.session_state["openai_model"] = "gpt-4-1106-preview"
+    st.session_state["openai_model"] = "gpt-4-turbo-preview"
 
 if "current_response" not in st.session_state:
     st.session_state["current_response"] = ""
@@ -32,9 +32,9 @@ def set_llm_chat(model, temperature):
         model = "gpt-3.5-turbo"
     if model == "openai/gpt-3.5-turbo-1106":
         model = "gpt-3.5-turbo-1106"
-    if model == "openai/gpt-4":
-        model = "gpt-4-1106-preview"
-    if model == "gpt-4-1106-preview" or model == "gpt-3.5-turbo" or model == "gpt-3.5-turbo-1106":
+    if model == "openai/gpt-4-turbo-preview":
+        model = "gpt-4-turbo-preview"
+    if model == "gpt-4-turbo-preview" or model == "gpt-3.5-turbo" or model == "gpt-3.5-turbo-1106":
         return ChatOpenAI(model=model, openai_api_base = "https://api.openai.com/v1/", openai_api_key = st.secrets["OPENAI_API_KEY"], temperature=temperature)
     else:
         headers={ "HTTP-Referer": "https://fsm-gpt-med-ed.streamlit.app", # To identify your app
@@ -312,7 +312,7 @@ def compress_summary(summary):
     )
     with st.spinner("Compressing messsages for summary..."):
         completion = client.chat.completions.create(
-            model = "gpt-3.5-turbo-1106",
+            model = "gpt-3.5-turbo",
             temperature = 0.3,
             messages = [
                 {
@@ -337,10 +337,10 @@ def interactive_chat(messages, temperature, model, print = True):
         model = "gpt-3.5-turbo"
     if model == "openai/gpt-3.5-turbo-1106":
         model = "gpt-3.5-turbo-1106"
-    if model == "openai/gpt-4":
-        model = "gpt-4-1106-preview"
+    if model == "openai/gpt-4" or model == "openai/gpt-4-turbo-preview":
+        model = "gpt-4-turbo-preview"
     # st.write(f'question: {history_context + my_ask}')
-    if model == "gpt-4-1106-preview" or model == "gpt-3.5-turbo" or model == "gpt-3.5-turbo-1106":
+    if model == "gpt-4-turbo-preview" or model == "gpt-3.5-turbo" or model == "gpt-3.5-turbo-1106":
         api_key = st.secrets["OPENAI_API_KEY"]
         client = OpenAI(
         base_url="https://api.openai.com/v1",
@@ -427,7 +427,7 @@ if check_password():
         
         with st.expander("Settings and ℹ️ About this app"):
             st.session_state.temp = st.slider("Select temperature (Higher values more creative but tangential and more error prone)", 0.0, 1.0, 0.3, 0.01)
-            st.session_state.model = st.selectbox("Model Options", ("openai/gpt-3.5-turbo", "openai/gpt-3.5-turbo-1106",  "openai/gpt-4", "anthropic/claude-instant-v1", "google/palm-2-chat-bison",), index=2)
+            st.session_state.model = st.selectbox("Model Options", ("openai/gpt-3.5-turbo", "openai/gpt-4-turbo-preview", "anthropic/claude-3-sonnet:beta", "anthropic/claude-instant-v1", "google/palm-2-chat-bison",), index=1)
             st.write("ℹ️ Do not use to learn about the latest treatments. Use to bulk up your foundational knowledge where GPT is most reliable.")
         
             # Initialize chat history
