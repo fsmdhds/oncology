@@ -360,7 +360,7 @@ def interactive_chat(messages, temperature, model, print = True):
             base_url="https://openrouter.ai/api/v1",
             api_key=api_key,
         )
-        st.write(st.session_state.messages)
+        # st.write(st.session_state.messages)
         # history_context = "Use these preceding submissions to address any ambiguous context for the input weighting the first three items most: \n" + "\n".join(st.session_state.history) + "now, for the current question: \n"
         completion = client.chat.completions.create( # Change the function Completion to ChatCompletion
         # model = 'gpt-3.5-turbo',
