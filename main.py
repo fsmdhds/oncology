@@ -1101,17 +1101,14 @@ if check_password():
 
 
     with st.sidebar.expander("Select a GPT Language Model", expanded=True):
-        st.session_state.model = st.selectbox("Model Options", ("openai/gpt-3.5-turbo", "openai/gpt-3.5-turbo-1106",  "openai/gpt-4", "openai/gpt-4-1106-preview", "anthropic/claude-instant-v1", "google/palm-2-chat-bison", "meta-llama/codellama-34b-instruct", "meta-llama/llama-2-70b-chat", "gryphe/mythomax-L2-13b", "nousresearch/nous-hermes-llama2-13b"), index=1)
+        st.session_state.model = st.selectbox("Model Options", ("openai/gpt-3.5-turbo","openai/gpt-4-turbo-preview", "anthropic/claude-instant-v1", "anthropic/claude-3-sonnet:beta", "google/palm-2-chat-bison", "meta-llama/codellama-34b-instruct", "meta-llama/llama-2-70b-chat", "gryphe/mythomax-L2-13b", "nousresearch/nous-hermes-llama2-13b"), index=0)
         if st.session_state.model == "google/palm-2-chat-bison":
             st.warning("The Google model doesn't stream the output, but it's fast. (Will add Med-Palm2 when it's available.)")
             st.markdown("[Information on Google's Palm 2 Model](https://ai.google/discover/palm2/)")
-        if st.session_state.model == "openai/gpt-4-1106-preview":
-            st.warning("GPT-4 preview JUST RELEASED 11-6-2023 has a huge context window but is in beta.")
+        if st.session_state.model == "openai/gpt-4-turbo-preview":
+            # st.warning("GPT-4 preview JUST RELEASED 11-6-2023 has a huge context window but is in beta.")
             st.markdown("[Information on OpenAI's GPT-4-1106-preview](https://openai.com/blog/new-models-and-developer-products-announced-at-devday)")
         
-        if st.session_state.model == "openai/gpt-4":
-            st.warning("GPT-4 is much more expensive and sometimes, not always, better than others.")
-            st.markdown("[Information on OpenAI's GPT-4](https://platform.openai.com/docs/models/gpt-4)")
         if st.session_state.model == "anthropic/claude-instant-v1":
             st.markdown("[Information on Anthropic's Claude-Instant](https://www.anthropic.com/index/releasing-claude-instant-1-2)")
         if st.session_state.model == "meta-llama/llama-2-70b-chat":
@@ -1167,7 +1164,7 @@ if check_password():
             st.session_state.history.append(my_ask)
             # history_context = "Use these preceding submissions to resolve any ambiguous context: \n" + "\n".join(st.session_state.history) + "now, for the current question: \n"
             with st.expander("Preliminary Answer - pending NLM content review below", expanded=True):
-                if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-3.5-turbo-1106" or st.session_state.model == "openai/gpt-4" or st.session_state.model== "openai/gpt-4-11-6-preview":
+                if st.session_state.model == "openai/gpt-3.5-turbo"  or st.session_state.model == "openai/gpt-4-turbo-preview":
                     # output_text = answer_using_prefix_openai(system_context, sample_question, sample_response, my_ask, st.session_state.temp, history_context="")
                     try:
                         output_text = answer_using_prefix_openai(system_context, "", "", my_ask, st.session_state.temp, "")
