@@ -278,7 +278,7 @@ if st.secrets["use_docker"] == "True" or check_password2():
 
 
     prompt = PromptTemplate(input_variables=["history", "human_input"], template=formatted_template)
-    llm_chain = LLMChain(llm=ChatOpenAI(openai_api_key=openai_api_key, model = "gpt-3.5-turbo-1106"), prompt=prompt, memory=memory)
+    llm_chain = LLMChain(llm=ChatOpenAI(openai_api_key=openai_api_key, model = "gpt-3.5-turbo"), prompt=prompt, memory=memory)
 
     # Render current messages from StreamlitChatMessageHistory
     for msg in msgs_interview.messages:

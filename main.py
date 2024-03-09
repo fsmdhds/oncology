@@ -368,7 +368,7 @@ def reconcile_answers(context, question, old, new):
             api_key=api_key,
         )
         completion = client.chat.completions.create(
-            model = "gpt-4-1106-preview",
+            model = "gpt-4-turbo-preview",
             temperature = 0.3,
             messages = [
                 {
@@ -456,13 +456,9 @@ def set_llm_chat(model, temperature):
     st.session_state.expanded = False
     if model == "openai/gpt-3.5-turbo":
         model = "gpt-3.5-turbo"
-    if model == "openai/gpt-3.5-turbo-1106":
-        model = "gpt-3.5-turbo-1106"
-    if model == "openai/gpt-4":
-        model = "gpt-4-1106-preview"
-    if model == "openai/gpt-4-1106-preview":
-        model = "gpt-4-1106-preview"
-    if model == "gpt-4-1106-preview" or model == "gpt-3.5-turbo" or model == "gpt-3.5-turbo-1106" or model == "gpt-4-1106-preview":
+    if model == "openai/gpt-4-turbo-preview":
+        model = "gpt-4-turbo-preview"
+    if model == "gpt-4-turbo-preview" or model == "gpt-3.5-turbo":
         return ChatOpenAI(model=model, openai_api_base = "https://api.openai.com/v1/", openai_api_key = st.secrets["OPENAI_API_KEY"], temperature=temperature)
     else:
         headers={ "HTTP-Referer": "https://fsm-gpt-med-ed.streamlit.app", # To identify your app
@@ -790,12 +786,8 @@ def answer_using_prefix_openai_old(prefix, sample_question, sample_answer, my_as
     openai.api_key = st.secrets['OPENAI_API_KEY']
     if st.session_state.model == "openai/gpt-3.5-turbo":
         model = "gpt-3.5-turbo"
-    if st.session_state.model == "openai/gpt-3.5-turbo-1106":
-        model = "gpt-3.5-turbo-1106"
-    if st.session_state.model == "openai/gpt-4":
-        model = "gpt-4-1106-preview"
-    if st.session_state.model == "openai/gpt-4-1106-preview":
-        model = "gpt-4-1106-preview"
+    if st.session_state.model == "openai/gpt-4-turbo-preview":
+        model = "gpt-4-turbo-preview"
     if history_context == None:
         history_context = ""
     stream = True
@@ -955,7 +947,7 @@ def prepare_rag(text):
     st.session_state.expanded = False
     splits = split_texts(text, chunk_size=1000, overlap=100, split_method="recursive")
     st.session_state.retriever = create_retriever(splits)
-    llm = set_llm_chat(model="gpt-4-1106-preview", temperature=st.session_state.temp)
+    llm = set_llm_chat(model="gpt-4-turbo-preview", temperature=st.session_state.temp)
     rag = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=st.session_state.retriever)
     return rag
     
@@ -1015,7 +1007,7 @@ if 'openai_api_key' not in st.session_state:
     st.session_state.openai_api_key = ""
     
 if 'model' not in st.session_state:
-    st.session_state.model = "openai/gpt-3.5-turbo-1106"
+    st.session_state.model = "openai/gpt-3.5-turbo"
     
 if 'temp' not in st.session_state:
     st.session_state.temp = 0.3
@@ -1091,7 +1083,7 @@ with title2:
         st.session_state.temp = st.slider("Select temperature (Higher values more creative but tangential and more error prone)", 0.0, 1.0, 0.3, 0.01)
         st.write("Last updated 10/14/23")
         st.write("ALPHA version 1.0")
-    st.info("With OpenAI announcement 11-6-2023, new model added: GPT-4-1106-preview. It's in beta and allows longer text inputs than GPT-4.")
+    # st.info("With OpenAI announcement 11-6-2023, new model added: GPT-4-1106-preview. It's in beta and allows longer text inputs than GPT-4.")
 
 if st.secrets["use_docker"] == "True" or check_password():
     
@@ -1103,24 +1095,24 @@ if st.secrets["use_docker"] == "True" or check_password():
 
 
     with st.sidebar.expander("Select a GPT Language Model", expanded=True):
-        st.session_state.model = st.selectbox("Model Options", ("openai/gpt-3.5-turbo", "openai/gpt-3.5-turbo-1106",  "openai/gpt-4", "openai/gpt-4-1106-preview", "anthropic/claude-instant-v1", "google/palm-2-chat-bison", "meta-llama/codellama-34b-instruct", "meta-llama/llama-2-70b-chat", "gryphe/mythomax-L2-13b", "nousresearch/nous-hermes-llama2-13b"), index=1)
+        st.session_state.model = st.selectbox("Model Options", ("openai/gpt-3.5-turbo",  "openai/gpt-4-turbo-preview",  "anthropic/claude-3-sonnet:beta", "anthropic/claude-instant-v1", "google/palm-2-chat-bison", "meta-llama/codellama-34b-instruct", "meta-llama/llama-2-70b-chat", "gryphe/mythomax-L2-13b", "nousresearch/nous-hermes-llama2-13b"), index=1)
         if st.session_state.model == "google/palm-2-chat-bison":
             st.warning("The Google model doesn't stream the output, but it's fast. (Will add Med-Palm2 when it's available.)")
             st.markdown("[Information on Google's Palm 2 Model](https://ai.google/discover/palm2/)")
-        if st.session_state.model == "openai/gpt-4-1106-preview":
-            st.warning("GPT-4 preview JUST RELEASED 11-6-2023 has a huge context window but is in beta.")
-            st.markdown("[Information on OpenAI's GPT-4-1106-preview](https://openai.com/blog/new-models-and-developer-products-announced-at-devday)")
+        # if st.session_state.model == "openai/gpt-4-turbo-preview":
+        #     # st.warning("GPT-4 preview JUST RELEASED 11-6-2023 has a huge context window but is in beta.")
+        #     st.markdown("[Information on OpenAI's GPT-4](https://openai.com/blog/new-models-and-developer-products-announced-at-devday)")
         
-        if st.session_state.model == "openai/gpt-4":
+        if st.session_state.model == "openai/gpt-4-turbo-preview":
             st.warning("GPT-4 is much more expensive and sometimes, not always, better than others.")
             st.markdown("[Information on OpenAI's GPT-4](https://platform.openai.com/docs/models/gpt-4)")
         if st.session_state.model == "anthropic/claude-instant-v1":
             st.markdown("[Information on Anthropic's Claude-Instant](https://www.anthropic.com/index/releasing-claude-instant-1-2)")
         if st.session_state.model == "meta-llama/llama-2-70b-chat":
             st.markdown("[Information on Meta's Llama2](https://ai.meta.com/llama/)")
+        # if st.session_state.model == "openai/gpt-3.5-turbo":
+        #     st.markdown("[Information on OpenAI's GPT-3.5](https://platform.openai.com/docs/models/gpt-3-5)")
         if st.session_state.model == "openai/gpt-3.5-turbo":
-            st.markdown("[Information on OpenAI's GPT-3.5](https://platform.openai.com/docs/models/gpt-3-5)")
-        if st.session_state.model == "openai/gpt-3.5-turbo-1106":
             st.markdown("[Information on OpenAI's GPT-3.5](https://platform.openai.com/docs/models/gpt-3-5)")
         if st.session_state.model == "gryphe/mythomax-L2-13b":
             st.markdown("[Information on Gryphe's Mythomax](https://huggingface.co/Gryphe/MythoMax-L2-13b)")
@@ -1169,7 +1161,7 @@ if st.secrets["use_docker"] == "True" or check_password():
             st.session_state.history.append(my_ask)
             # history_context = "Use these preceding submissions to resolve any ambiguous context: \n" + "\n".join(st.session_state.history) + "now, for the current question: \n"
             with st.expander("Preliminary Answer - pending NLM content review below", expanded=True):
-                if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-3.5-turbo-1106" or st.session_state.model == "openai/gpt-4" or st.session_state.model== "openai/gpt-4-11-6-preview":
+                if st.session_state.model == "openai/gpt-3.5-turbo"  or st.session_state.model == "openai/gpt-4":
                     # output_text = answer_using_prefix_openai(system_context, sample_question, sample_response, my_ask, st.session_state.temp, history_context="")
                     try:
                         output_text = answer_using_prefix_openai(system_context, "", "", my_ask, st.session_state.temp, "")
@@ -1309,7 +1301,7 @@ if st.secrets["use_docker"] == "True" or check_password():
                     # submitted_result = ""
                     if st.sidebar.button("Step 1: Generate a Patient Message"):
                         with col1:
-                            if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-3.5-turbo-1106" or st.session_state.model == "openai/gpt-4" or st.session_state.model== "openai/gpt-4-11-6-preview":
+                            if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-4-turbo-preview":
                                 st.session_state.sample_patient_message = answer_using_prefix_openai(
                                     sim_patient_context, 
                                     prompt_for_generating_patient_question, 
@@ -1338,7 +1330,7 @@ if st.secrets["use_docker"] == "True" or check_password():
             if st.button("Step 2: Generate Response for Patient Message"):
                 try:
                     with col2:
-                        if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-3.5-turbo-1106" or st.session_state.model == "openai/gpt-4" or st.session_state.model== "openai/gpt-4-11-6-preview":
+                        if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-4-turbo-preview":
                             pt_message_response = answer_using_prefix_openai(
                                 physician_response_context, 
                                 sample_patient_question, 
@@ -1378,7 +1370,7 @@ if st.secrets["use_docker"] == "True" or check_password():
             dc_instructions_needs = f'Generate discharge instructions for a patient as if it is authored by a physician for her patient with {health_literacy_level} discharged following {reason_for_hospital_stay} with this {surg_procedure}, {other_concerns} on {dc_meds}'
             if st.button("Generate Discharge Instructions"):
                 try:
-                    if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-3.5-turbo-1106" or st.session_state.model == "openai/gpt-4" or st.session_state.model== "openai/gpt-4-11-6-preview":
+                    if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-4-turbo-preview":
                         dc_text = answer_using_prefix_openai(
                             dc_instructions_prompt, 
                             procedure_example, 
@@ -1454,7 +1446,7 @@ if st.secrets["use_docker"] == "True" or check_password():
                     submitted_result = ""
                     if st.sidebar.button("Generate Sample Report"):
                         with col1:
-                            if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-3.5-turbo-1106" or st.session_state.model == "openai/gpt-4" or st.session_state.model== "openai/gpt-4-11-6-preview":
+                            if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-4-turbo-preview":
                                 st.session_state.sample_report = answer_using_prefix_openai(
                                     report_prompt, 
                                     user_report_request, 
@@ -1483,7 +1475,7 @@ if st.secrets["use_docker"] == "True" or check_password():
             if st.button("Generate Annotation"):
                 try:
                     with col2:
-                        if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-3.5-turbo-1106" or st.session_state.model == "openai/gpt-4" or st.session_state.model== "openai/gpt-4-11-6-preview":
+                        if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-4-turbo-preview":
                             annotate_text = answer_using_prefix_openai(
                                 annotate_prompt, 
                                 report1, 
@@ -1583,7 +1575,7 @@ if st.secrets["use_docker"] == "True" or check_password():
             
             if st.button("Generate Differential Diagnosis"):
                 # Your differential diagnosis generation code goes here
-                if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-3.5-turbo-1106" or st.session_state.model == "openai/gpt-4" or st.session_state.model== "openai/gpt-4-11-6-preview":
+                if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-4-turbo-preview":
                     ddx_output_text = answer_using_prefix_openai(ddx_prefix, ddx_sample_question, ddx_sample_answer, ddx_prompt, temperature=0.3, history_context='')
                     st.session_state.ddx_output_text = ddx_output_text
                 else:
@@ -1618,7 +1610,7 @@ if st.secrets["use_docker"] == "True" or check_password():
             alt_dx_prompt = st.text_input("Enter your presumed diagnosis.")
 
             if st.button("Generate Alternative Diagnoses"):
-                if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-3.5-turbo-1106" or st.session_state.model == "openai/gpt-4" or st.session_state.model== "openai/gpt-4-11-6-preview":
+                if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-4-turbo-preview":
                     alt_dx_output_text = answer_using_prefix_openai(alt_dx_prefix, alt_dx_sample_question, alt_dx_sample_answer, alt_dx_prompt, temperature=0.0, history_context='')
                     st.session_state.alt_dx_output_text = alt_dx_output_text
                 else:
@@ -1667,7 +1659,7 @@ if st.secrets["use_docker"] == "True" or check_password():
         my_ask_for_pt_ed = my_ask_for_pt_ed + "with health literacy level: " + pt_ed_health_literacy
         if st.button("Click to Generate **Draft** Custom Patient Education Materials"):
             st.info("Review all content carefully before considering any use!")
-            if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-3.5-turbo-1106" or st.session_state.model == "openai/gpt-4" or st.session_state.model== "openai/gpt-4-11-6-preview":
+            if st.session_state.model == "openai/gpt-3.5-turbo"  or st.session_state.model == "openai/gpt-4-turbo-preview":
                 pt_ed_output_text = answer_using_prefix_openai(pt_ed_system_content, sample_topic, pt_ed_content_sample, my_ask_for_pt_ed, patient_ed_temp, history_context="")
                 st.session_state.pt_ed_output_text = pt_ed_output_text
                 
@@ -1839,7 +1831,7 @@ if st.secrets["use_docker"] == "True" or check_password():
 
         if set_domain == "Semantic Search" or set_domain == "Ask PubMed":
             st.info("""Next, words in the abstracts are converted to numbers for analysis. This is called embedding and is performed using an OpenAI [embedding model](https://platform.openai.com/docs/guides/embeddings/what-are-embeddings) and then indexed for searching. Lastly,
-                    your selected model (e.g., gpt-3.5-turbo-1106) is used to answer your question.""")
+                    your selected model (e.g., gpt-3.5-turbo) is used to answer your question.""")
 
 
             if st.session_state.abstracts != "" or st.session_state.s2_abstracts != "":
@@ -1934,7 +1926,7 @@ if st.secrets["use_docker"] == "True" or check_password():
                     my_ask_for_websearch = f'User: {my_ask_for_websearch} \n\n Content basis for your answer: {raw_output}'
 
                 
-                    if st.session_state.model == "openai/gpt-3.5-turbo" or st.session_state.model == "openai/gpt-3.5-turbo-1106" or st.session_state.model == "openai/gpt-4" or st.session_state.model== "openai/gpt-4-11-6-preview":
+                    if st.session_state.model == "openai/gpt-3.5-turbo"  or st.session_state.model == "openai/gpt-4-turbo-preview":
                         st.warning("Be sure to validate! This just used web snippets to answer your question!")
                         skim_output_text = answer_using_prefix_openai(interpret_search_results_prefix, "", '', my_ask_for_websearch, search_temp, history_context="")
                         
@@ -1990,7 +1982,7 @@ if st.secrets["use_docker"] == "True" or check_password():
     with tab6:
         st.header("Chat with your PDFs!")
         st.info("""Embeddings, i.e., reading your file(s) and converting words to numbers, are created using an OpenAI [embedding model](https://platform.openai.com/docs/guides/embeddings/what-are-embeddings) and indexed for searching. Then,
-                your selected model (e.g., gpt-3.5-turbo-1106) is used to answer your questions.""")
+                your selected model (e.g., gpt-3.5-turbo) is used to answer your questions.""")
         st.warning("""Some PDFs are images and not formatted text. If the summary feature doesn't work, you may first need to convert your PDF
                    using Adobe Acrobat. Choose: `Scan and OCR`,`Enhance scanned file` \n   Alternatively, sometimes PDFs are created with 
                    unusual fonts or LaTeX symbols. Export the file to Word, re-save as a PDF and try again. Save your updates, upload and voilà, you can chat with your PDF! """)
