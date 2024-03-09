@@ -228,8 +228,8 @@ if "last_response_interview" not in st.session_state:
 if st.secrets["use_docker"] == "True" or check_password2():
     st.info("Have fun. Enter responses at the bottom of the page or choose the Microphone option. This tool uses openai's GPT3.5 turbo 16k model.")
     system_context = st.radio("Select an interviewer type :", ("Tough", "Nice",), horizontal = True, index=0)
-    specialty = st.text_input("Enter your specialty", placeholder="e.g. Emergency Medicine")
-    position = st.text_input("Enter your position", placeholder="e.g. resident")
+    area = st.text_input("Enter the clinical area of the position you're interviewing for", placeholder="e.g. General Neurology, Stroke, etc.")
+    role = st.text_input("Enter the position desired (faculty or staff roles; clinical or business)", placeholder="e.g. Attending Neurologist, Epileptologist, Research Professor, Business Administrator, etc. ")
     
     
 
@@ -247,8 +247,8 @@ if st.secrets["use_docker"] == "True" or check_password2():
         st.session_state["last_response_interview"] = "Hi, I'm Dr. Smith! Nice to meet you!"
     
     
-    if specialty is not None and position is not None:
-        formatted_template = template.format(specialty=specialty, position=position, history = "{history}", human_input = "{human_input}")
+    if area is not None and role is not None:
+        formatted_template = template.format(specialty=area, position=role, history = "{history}", human_input = "{human_input}")
         # st.write(f'{formatted_template}')    
 
 
