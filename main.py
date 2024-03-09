@@ -1095,7 +1095,7 @@ if st.secrets["use_docker"] == "True" or check_password():
 
 
     with st.sidebar.expander("Select a GPT Language Model", expanded=True):
-        st.session_state.model = st.selectbox("Model Options", ("openai/gpt-3.5-turbo",  "openai/gpt-4-turbo-preview",  "anthropic/claude-3-sonnet:beta", "anthropic/claude-instant-v1", "google/palm-2-chat-bison", "meta-llama/codellama-34b-instruct", "meta-llama/llama-2-70b-chat", "gryphe/mythomax-L2-13b", "nousresearch/nous-hermes-llama2-13b"), index=1)
+        st.session_state.model = st.selectbox("Model Options", ("openai/gpt-3.5-turbo",  "openai/gpt-4-turbo-preview",  "anthropic/claude-3-sonnet:beta", "anthropic/claude-instant-v1", "google/palm-2-chat-bison", "meta-llama/codellama-34b-instruct", "meta-llama/llama-2-70b-chat", "gryphe/mythomax-L2-13b", "nousresearch/nous-hermes-llama2-13b"), index=0)
         if st.session_state.model == "google/palm-2-chat-bison":
             st.warning("The Google model doesn't stream the output, but it's fast. (Will add Med-Palm2 when it's available.)")
             st.markdown("[Information on Google's Palm 2 Model](https://ai.google/discover/palm2/)")
