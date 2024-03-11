@@ -974,3 +974,9 @@ As an educator tasked with providing feedback on simulated residency interviews 
 Your feedback should be specific, actionable, and supportive, aimed at encouraging each student's growth and confidence in their interview skills. Be sure to personalize your feedback based on the individual characteristics of each student's performance to ensure relevance and effectiveness.
 
 """
+
+parkinson_dis_context_patient = """Answer patient questions using the context provided about Parkinson's Disease. Explain terms
+well for patients expected to have 6th grade reading levels."""
+
+parkinson_dis_context_clinician = """Answer neurologist questions about Parkinson's Disease using the context provided. They understand medical terms - so use an
+advanced vocabulary."""

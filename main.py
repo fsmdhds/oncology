@@ -1980,7 +1980,7 @@ if st.secrets["use_docker"] == "True" or check_password():
     
     
     with tab6:
-        st.header("Chat with your PDFs!")
+        st.header("Chat about Neurology or with your PDFs!")
         st.info("""Embeddings, i.e., reading your file(s) and converting words to numbers, are created using an OpenAI [embedding model](https://platform.openai.com/docs/guides/embeddings/what-are-embeddings) and indexed for searching. Then,
                 your selected model (e.g., gpt-3.5-turbo) is used to answer your questions.""")
         st.warning("""Some PDFs are images and not formatted text. If the summary feature doesn't work, you may first need to convert your PDF
