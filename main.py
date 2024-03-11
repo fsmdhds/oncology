@@ -1128,7 +1128,7 @@ if st.secrets["use_docker"] == "True" or check_password():
         st.info("""Since GPT isn't up to date, this tool checks with reliable medical sites to validate and update its response. 
         Despite the validation process, review the retrieved evidence links. Not for direct care. GPT4 is automatically used for the final review.""")
         persona = st.radio("Select teaching persona", ("Teacher 1 (academic)", "Teacher 2 (analogies)", "Fact Listing", "Create Your Own Teaching Style"), index=0)
-        st.warning("For interactive dialog about a topic, use the 'interactive teacher' option in the left sidebar.")
+        # st.warning("For interactive dialog about a topic, use the 'interactive teacher' option in the left sidebar.")
         
         
 
@@ -1161,7 +1161,7 @@ if st.secrets["use_docker"] == "True" or check_password():
             st.session_state.history.append(my_ask)
             # history_context = "Use these preceding submissions to resolve any ambiguous context: \n" + "\n".join(st.session_state.history) + "now, for the current question: \n"
             with st.expander("Preliminary Answer - pending NLM content review below", expanded=True):
-                if st.session_state.model == "openai/gpt-3.5-turbo"  or st.session_state.model == "openai/gpt-4":
+                if st.session_state.model == "openai/gpt-3.5-turbo"  or st.session_state.model == "openai/gpt-4-turbo-preview":
                     # output_text = answer_using_prefix_openai(system_context, sample_question, sample_response, my_ask, st.session_state.temp, history_context="")
                     try:
                         output_text = answer_using_prefix_openai(system_context, "", "", my_ask, st.session_state.temp, "")
