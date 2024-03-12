@@ -1,11 +1,14 @@
 import streamlit as st
-import faiss
-import os
-import numpy as np
-import openai
-from openai import OpenAI
-import pickle
+# from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
+# from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
+# from langchain.chains import VectorDBQA
+from langchain.chains import RetrievalQA
+# from langchain.embeddings import OpenAIEmbeddings
+from langchain_community.embeddings import OpenAIEmbeddings
 from prompts import rag_prompt, references_used
+from langchain.callbacks.streamlit import StreamlitCallbackHandler
 
 st.set_page_config(page_title='Neurology Chats', layout = 'centered', page_icon = "💬", initial_sidebar_state = 'auto')    
 
@@ -41,100 +44,48 @@ def check_password2():
     else:
         # Password correct.
         return True
-@st.cache_data
-def analyze_rag_docs(prompt, model="gpt-3.5-turbo"):
-    client = OpenAI(base_url="https://api.openai.com/v1", api_key=st.secrets['OPENAI_API_KEY'])
-    # Generate the answer using OpenAI
-    # stream = client.chat.completions.create(
-    #     model=model,
-    #     messages =[{"role": "system", "content": rag_prompt}, 
-    #                {"role": "user", "content": prompt}],
-    #     # max_tokens=1024,
-    #     # n=1,
-    #     # stop=None,
-    #     temperature=0.3,
-    #     stream = True,
-    # )
-    # with st.chat_message("assistant"):
-    stream = client.chat.completions.create(
-        model=model,
-        messages =[{"role": "system", "content": rag_prompt}, 
-                {"role": "user", "content": prompt}],
-        temperature=0.3,
-        stream=True,
-    )
-    st.write_stream(stream)
 
-
-client = OpenAI(base_url="https://api.openai.com/v1", api_key=st.secrets['OPENAI_API_KEY'])
-
-# Get the directory of the current script
-script_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Load the FAISS database
-index_dir = "parkinson_disease.faiss"
-index_file = os.path.join(index_dir, "index.faiss")
-
-# Load the embeddings
-embeddings_file = os.path.join(script_dir, "../parkinson_disease.faiss/index.pkl")
-with open(embeddings_file, "rb") as f:
-    embeddings = pickle.load(f)
-
-vectorstore = faiss.read_index(index_file)  
-# embeddings = np.load("parkinson_disease_embeddings.npy")
-
-# OpenAI API key
-openai.api_key = st.secrets['OPENAI_API_KEY']
 
 # Streamlit app
-st.title("Parkinson's Disease Question/Answering")
-
+st.title("Parkinson's Disease Question Answering")
 with st.expander("ℹ️ About this App and Settings"):
     st.warning("Validate all responses - this is for exploration of AI at the AAN meeting.")
     st.write("Author: David Liebovitz, MD")
     model = st.selectbox("Select a model:", ["gpt-3.5-turbo", "gpt-4-turbo-preview"])
     st.markdown(references_used)
-    
+
+# Get user input
 
 if st.secrets["use_docker"] == "True" or check_password2():
+    st_callback = StreamlitCallbackHandler(st.container())
+    with st.spinner("Preparing Databases..."):
+        llm = ChatOpenAI(openai_api_key=st.secrets['OPENAI_API_KEY'], 
+                         model_name =model, 
+                         temperature=0.3,
+                         streaming=True,
+                )
 
-    # Get user input
+        # Load the FAISS database
+        embeddings = OpenAIEmbeddings(openai_api_key=st.secrets['OPENAI_API_KEY'],model="text-embedding-3-large")
+        vectorstore = FAISS.load_local("parkinson_disease.faiss", embeddings)
+
+    # # Set up the OpenAI LLM
+    # llm = OpenAI(temperature=0)
+
+    # Create the question-answering chain
+    qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=vectorstore.as_retriever(), chain_type="stuff", callbacks=[st_callback],)
+
     user_role = st.radio("What is your role?", ["Patient", "Neurologist", "Other"], horizontal=True)
     if user_role == "Other":
         user_role = st.text_input("Enter your role:")
 
     query = st.text_input("Ask a question about Parkinson's Disease:")
 
-    final_query = f'As a {user_role}, so please use appropriate terms, {query}'
+    final_query = f'{rag_prompt} As a {user_role}, so please use appropriate terms, {query}.'
 
     # If the user enters a query, get the answer
     if query:
         with st.spinner("Fomulating Answer..."):
-            # Encode the query
-            query_embedding = client.embeddings.create(input=query, model="text-embedding-3-large").data[0].embedding
 
-            # Perform similarity search
-            scores, indices = vectorstore.search(np.array([query_embedding]), k=10)
-            
-            # st.write(f'Scores: {scores}')
-            # st.write(f'Indices: {indices}')
-
-            # st.write(f'Embeddings Length: {len(embeddings)}')
-            
-            # st.write(f'One embedding: {embeddings[1][209]}')
-            
-            # Retrieve the most relevant documents
-            relevant_documents = [embeddings[1][idx] for idx in indices[0]]
-            
-        
-
-            # Construct the prompt for OpenAI
-            prompt = f"What do the documents say regarding: {final_query}\n\nRelevant Documents to use for answering the question:\n"
-            for doc in relevant_documents:
-                prompt += f"- {doc}\n"
-            prompt += "Answer:"
-            
-            st.info("**Source Material Response** relies on the references. **GPT Commentary** expands on the response.")
-            analyze_rag_docs(final_query, model=model)
-
-           
+            st.write(qa_chain(final_query)["result"])
+            # st.write(answer["result"])
