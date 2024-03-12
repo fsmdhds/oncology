@@ -981,6 +981,44 @@ well for patients expected to have 6th grade reading levels."""
 parkinson_dis_context_clinician = """Answer neurologist questions about Parkinson's Disease using the context provided. They understand medical terms - so use an
 advanced vocabulary."""
 
-rag_prompt = """Answer questions tailored to user roles, e.g., patient or physician. *Use only the relevant docs provided.*
-If the answer is not covered in the user provided relevant docs, return, 'I'm sorry - the answer 
-wasn't in the reference material provided.'"""
+rag_prompt = """Response Format:
+
+**Source Material Response:** \n
+[Analyze the provided documents and extract relevant information to comprehensively answer the user's query, tailoring language to their role/reading level]
+
+**Not Covered in Source Material Response:** \n
+[Provide supplemental relevant medical details, guidelines, advice etc. from the model's knowledge to further address the query, again adjusting language for the user]
+
+[End response with:]
+> _See also:_ [2-3 related searches]
+>{ varied emoji related to terms}[text to link](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=expanded+search+terms)
+> { varied emoji related to terms} [text to link](https://www.google.com/search?q=expanded+search+terms)
+> _You may also enjoy:_ [2-3 tangential, unusual, or fun related topics]
+> { varied emoji related to terms} [text to link](https://www.google.com/search?q=expanded+search+terms) 
+
+"""
+
+
+
+references_used = """
+
+### Source Materials
+Shrimanker I, Tadi P, Sánchez-Manso JC. Parkinsonism. [Updated 2022 Jun 7]. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2024 Jan-. Available from: https://www.ncbi.nlm.nih.gov/books/NBK542224/
+
+
+Agarwal S, Gilbert R. Progressive Supranuclear Palsy. [Updated 2023 Mar 27]. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2024 Jan-. Available from: https://www.ncbi.nlm.nih.gov/books/NBK526098/
+
+
+Gandhi KR, Saadabadi A. Levodopa (L-Dopa) [Updated 2023 Apr 17]. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2024 Jan-. Available from: https://www.ncbi.nlm.nih.gov/books/NBK482140/
+
+Vertes AC, Beato MR, Sonne J, et al. Parkinson-Plus Syndrome. [Updated 2023 Jun 1]. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2024 Jan-. Available from: https://www.ncbi.nlm.nih.gov/books/NBK585113/
+
+Haider A, Spurling BC, Sánchez-Manso JC. Lewy Body Dementia. [Updated 2023 Feb 12]. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2024 Jan-. Available from: https://www.ncbi.nlm.nih.gov/books/NBK482441/
+
+Patel D, Bordoni B. Physiology, Synuclein. [Updated 2023 Feb 6]. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2024 Jan-. Available from: https://www.ncbi.nlm.nih.gov/books/NBK553158/
+
+Agarwal S, Biagioni MC. Essential Tremor. [Updated 2023 Jul 10]. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2024 Jan-. Available from: https://www.ncbi.nlm.nih.gov/books/NBK499986/
+
+Choi J, Horner KA. Dopamine Agonists. [Updated 2023 Jun 26]. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2024 Jan-. Available from: https://www.ncbi.nlm.nih.gov/books/NBK551686/
+
+Moore JJ, Saadabadi A. Selegiline. [Updated 2023 Aug 17]. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2024 Jan-. Available from: https://www.ncbi.nlm.nih.gov/books/NBK526094/"""
