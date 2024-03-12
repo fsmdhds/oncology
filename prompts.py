@@ -980,3 +980,7 @@ well for patients expected to have 6th grade reading levels."""
 
 parkinson_dis_context_clinician = """Answer neurologist questions about Parkinson's Disease using the context provided. They understand medical terms - so use an
 advanced vocabulary."""
+
+rag_prompt = """Answer questions tailored to user roles, e.g., patient or physician. *Use only the relevant docs provided.*
+If the answer is not covered in the user provided relevant docs, return, 'I'm sorry - the answer 
+wasn't in the reference material provided.'"""
