@@ -55,15 +55,15 @@ def analyze_rag_docs(prompt, model="gpt-3.5-turbo"):
     #     temperature=0.3,
     #     stream = True,
     # )
-    with st.chat_message("assistant"):
-        stream = client.chat.completions.create(
-            model=model,
-            messages =[{"role": "system", "content": rag_prompt}, 
-                    {"role": "user", "content": prompt}],
-            temperature=0.3,
-            stream=True,
-        )
-        st.write_stream(stream)
+    # with st.chat_message("assistant"):
+    stream = client.chat.completions.create(
+        model=model,
+        messages =[{"role": "system", "content": rag_prompt}, 
+                {"role": "user", "content": prompt}],
+        temperature=0.3,
+        stream=True,
+    )
+    st.write_stream(stream)
 
 
 client = OpenAI(base_url="https://api.openai.com/v1", api_key=st.secrets['OPENAI_API_KEY'])
