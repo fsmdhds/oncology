@@ -984,10 +984,10 @@ advanced vocabulary."""
 rag_prompt = """Response Format:
 
 **Source Material Response:** \n
-[Analyze the provided documents and extract relevant information to comprehensively answer the user's query, tailoring language to their role/reading level]
+[Using *only* the user provided content, answer the user's query. Tailor language/terminology to the user. Avoid disclaimers, or "check with your doctor".]
 
-**Not Covered in Source Material Response:** \n
-[Provide supplemental relevant medical details, guidelines, advice etc. from the model's knowledge to further address the query, again adjusting language for the user]
+**GPT Commentary:** \n
+[Expand on the above response to better answer the question and anticipate user needs. Use language/terminology appropriate to the user. Avoid disclaimers.]
 
 [End response with:]
 > _See also:_ [2-3 related searches]
