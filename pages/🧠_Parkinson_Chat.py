@@ -134,6 +134,7 @@ if st.secrets["use_docker"] == "True" or check_password2():
                 prompt += f"- {doc}\n"
             prompt += "Answer:"
             
+            st.info("**Source Material Response** relies on the references. **GPT Commentary** expands on the response.")
             analyze_rag_docs(final_query, model=model)
 
            
