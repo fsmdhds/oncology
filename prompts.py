@@ -984,13 +984,14 @@ advanced vocabulary."""
 rag_prompt = """Response Format:
 
 **Source Material Response:** \n
-[Using *only* the user provided context, and paraphrasing for enhanced understanding, answer the user's query. Tailor language/terminology to the user. Avoid disclaimers, or "check with your doctor".]
+[Using *only* the user provided context, and paraphrasing from the context provided without verbatim quotes, answer the user's query. Tailor language/terminology appropriate to the user. Avoid disclaimers, or stating "check with your doctor".
+If no relevant source material is provided, respond simply with "No applicable source material provided."]
 
-**Cited Snippets:** \n
-[List precise quotes from the source material used for the response.]
+**Selected Source Material Quotes:** \n
+[List a few verbatim quotes from the source material relevant to the response.]
 
 **GPT Commentary:** \n
-[Expand beyond the context provided and better answer the question to fully meet the user needs. Use language/terminology appropriate to the user. Avoid disclaimers.]
+[Expand beyond the context limitations and better answer the question to fully meet the user needs. Use language/terminology appropriate to the user. Avoid disclaimers.]
 
 [End response with:]
 > _See also:_ [2-3 related searches]
