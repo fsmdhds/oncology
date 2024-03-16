@@ -124,8 +124,9 @@ Format:
 
 key_points_list_for_chatbot = """Given the {context}, generate a comprehensive list of topics and sub-topics suitable for teaching and discussion. 
 Ensure this list is coherent, free of redundancies, and effectively effectively organized to convey the essence of the original material. Format as per this example with likely greater detail and many subtopics:
+For example, if the context is primarily about environmental conservation, the list might look like this:
 
-# Sample Topic Overview: Environmental Conservation
+# Topic Overview: Environmental Conservation
 
 ### I. Introduction to Conservation
 - **A. Definition and Importance**
