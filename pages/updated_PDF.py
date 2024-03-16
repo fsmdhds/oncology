@@ -29,7 +29,7 @@ from langchain.chains import RetrievalQA
 
 @st.cache_data
 def return_questions(model= "gpt-4-turbo-preview", response_format = { "type": "json_object" }, stream = False, system_prompt = '', user_prompt = ""):
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
     prepare_options = client.chat.completions.create(
         model=model,
         response_format=response_format,
@@ -47,10 +47,10 @@ class PDF(FPDF):
         self.cell(0, 10, 'Chat History', 0, 1, 'C')
 
 @st.cache_data
-def get_summary_from_qa(doc_content, chain_type, teaching_style, summary_template):
+def get_summary_from_qa(_llm, _retriever, chain_type, prompt):
     with st.spinner("Generating summary for a custom chatbot"):
-        qa = RetrievalQA.from_chain_type(llm=llm, chain_type=chain_type, retriever=retriever, return_source_documents=True)
-        index_context = f'Use only the reference document for knowledge. Question: {summary_template}'
+        qa = RetrievalQA.from_chain_type(llm=_llm, chain_type=chain_type, retriever=_retriever, return_source_documents=True)
+        index_context = f'Use only the reference document for knowledge. Question: {prompt}'
         summary_for_chatbot = qa(index_context)
         return summary_for_chatbot["result"]
 
@@ -234,10 +234,12 @@ if st.secrets["use_docker"]=="True" or check_password():
 
     uploaded_files = st.file_uploader("Choose your file(s). Currently uses only your last uploaded file. if your PDF is readable by the tool, an outline will appear to the left.", accept_multiple_files=True)
 
-    ask_pd = st.checkbox("Ask Questions about PD!", value = True)
+    use_local = st.checkbox("Use already processed PDFs", value=True)
+    if use_local:
+        pick_topic = st.selectbox("Select a Topic", ("Parkinson's Disease", "Multiple Sclerosis"))
         
     
-    if uploaded_files is not None and ask_pd == False:
+    if uploaded_files is not None and use_local == False:
         documents = load_docs(uploaded_files)
         texts = split_texts(documents, chunk_size=1250,
                                     overlap=200, split_method="splitter_type")
@@ -263,8 +265,10 @@ if st.secrets["use_docker"]=="True" or check_password():
             st.write(summary_for_chatbot)
             st.session_state.pdf_outline = summary_for_chatbot
 
-    elif ask_pd == True:
+    elif use_local == True:
         
+        if pick_topic == "Parkinson's Disease":
+            database_loc = "parkinson_disease.faiss"
 
         llm = ChatOpenAI(openai_api_key=st.secrets['OPENAI_API_KEY'], 
                          model_name ="gpt-3.5-turbo", 
@@ -274,7 +278,7 @@ if st.secrets["use_docker"]=="True" or check_password():
 
         # Load the FAISS database
         embeddings = OpenAIEmbeddings(openai_api_key=st.secrets['OPENAI_API_KEY'],model="text-embedding-3-large")
-        vectorstore = FAISS.load_local("parkinson_disease.faiss", embeddings)
+        vectorstore = FAISS.load_local(database_loc, embeddings)
 
         # # Set up the OpenAI LLM
         # llm = OpenAI(temperature=0)
@@ -287,7 +291,8 @@ if st.secrets["use_docker"]=="True" or check_password():
         #     summary_for_chatbot = get_summary_from_qa('', "stuff", "", prepare_summary)
         
         index_context = f'Use only the reference document for knowledge. Question: {prepare_summary}'
-        summary_for_chatbot = qa(index_context)["result"]
+        # summary_for_chatbot = qa(index_context)["result"]
+        summary_for_chatbot = get_summary_from_qa(llm, vectorstore.as_retriever(), "stuff", index_context)
             
         with st.sidebar.expander("Topics available to your Chatbot", expanded=True):
             st.info("Outline from the PDF")
@@ -302,7 +307,7 @@ if st.secrets["use_docker"]=="True" or check_password():
 
     col1, col2 = st.columns(2)
     with col1:
-        pdf_chat_option = st.selectbox("Select an Option", ("Ask about Parkinson's Disease", "Summarize your PDF", "Ask Questions about your PDF", "Generate MCQs from your PDF", "Appraise a Clinical Trial PDF"))
+        pdf_chat_option = st.selectbox("Select an Option", ("Ask Questions about your PDF", "Summarize your PDF",  "Generate MCQs from your PDF", "Appraise a Clinical Trial PDF"))
     
     # if pdf_chat_option == "Ask about Parkinson's Disease":
     #     st.write("Note GPT4 is much better; may take a few minutes to run.")
@@ -349,7 +354,7 @@ if st.secrets["use_docker"]=="True" or check_password():
             user_question = f'Topic for question generation: {user_focus}' + f'\n\n {mcq_generation_template}'
             user_question = user_question.format(num_mcq=num_mcq, context = "{context}")
 
-    if pdf_chat_option == "Ask Questions about your PDF" or pdf_chat_option == "Ask about Parkinson's Disease":
+    if pdf_chat_option == "Ask Questions about your PDF" :
         your_question = st.checkbox("Ask a custom question about your PDF.")
         if pdf_chat_option == "Ask Questions about your PDF": 
             if your_question == False:
