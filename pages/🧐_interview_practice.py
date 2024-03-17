@@ -226,9 +226,9 @@ if "last_response_interview" not in st.session_state:
     st.session_state["last_response_interview"] = "Hi, I'm Dr. Smith! Nice to meet you!"
 
 if st.secrets["use_docker"] == "True" or check_password2():
-    st.info("Have fun. Enter responses at the bottom of the page or choose the Microphone option. This tool uses openai's GPT3.5 turbo 16k model.")
+    st.info("Have fun. Enter responses at the bottom of the page or choose the Microphone option. This tool uses openai's GPT3.5 turbo model and illustrates voice interactions from language models.")
     system_context = st.radio("Select an interviewer type :", ("Tough", "Nice",), horizontal = True, index=0)
-    area = st.text_input("Enter the clinical area of the position you're interviewing for", placeholder="e.g. General Neurology, Stroke, etc.")
+    area = st.text_input("Enter the clinical area for the position of interest", placeholder="e.g. General Neurology, Stroke, etc.")
     role = st.text_input("Enter the position desired (faculty or staff roles; clinical or business)", placeholder="e.g. Attending Neurologist, Epileptologist, Research Professor, Business Administrator, etc. ")
     
     
@@ -242,7 +242,7 @@ if st.secrets["use_docker"] == "True" or check_password2():
         template = nice_interviewer
         voice = 'shimmer'
         
-    if st.button("Set a Scenario"):
+    if st.button("Set the Scenario"):
         clear_session_state_except_password_correct()
         st.session_state["last_response_interview"] = "Hi, I'm Dr. Smith! Nice to meet you!"
     
@@ -271,8 +271,9 @@ if st.secrets["use_docker"] == "True" or check_password2():
         st.info("Enter an OpenAI API Key to continue")
         st.stop()
 
-    input_source = st.radio("Input source", ("Text", "Microphone"), index=0)
-    st.session_state.audio_off = st.checkbox("Turn off voice generation", value=False) 
+    with st.sidebar:
+        input_source = st.radio("Input source", ("Text", "Microphone"), index=0)
+        st.session_state.audio_off = st.checkbox("Turn off voice generation", value=False) 
 
 
 
@@ -385,5 +386,6 @@ if st.secrets["use_docker"] == "True" or check_password2():
             # Print the response
             # link_to_audio = extract_url(response_from_audio.text)
             # st.write(path_audio)
-            autoplay_local_audio("last_interviewer.mp3")
+            with st.sidebar:
+                autoplay_local_audio("last_interviewer.mp3")
     

@@ -60,6 +60,10 @@ with st.sidebar:
 
 # Get user input
 
+st.warning("""This app uses pre-processed content from the NLM Bookshelf. The purpose here is to illustrate grounding answers
+           in reliable sources through Retrieval Augmented Generation (RAG). Processed content is stored in vector database and used when crafting a response. Sources are listed on the left. 
+           The response will indicate if the reference material available fails to answer the question. """)
+
 if st.secrets["use_docker"] == "True" or check_password2():
     st_callback = StreamlitCallbackHandler(st.container())
     with st.spinner("Preparing Databases..."):
