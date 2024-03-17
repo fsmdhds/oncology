@@ -51,8 +51,12 @@ st.title("Parkinson's Disease Question Answering")
 with st.expander("ℹ️ About this App and Settings"):
     st.warning("Validate all responses - this is for exploration of AI at the AAN meeting.")
     st.write("Author: David Liebovitz, MD")
+    
+with st.sidebar:
     model = st.selectbox("Select a model:", ["gpt-3.5-turbo", "gpt-4-turbo-preview"])
-    st.markdown(references_used)
+    with st.expander("Parkinson's Disease Sources"):
+        st.markdown(references_used)
+    
 
 # Get user input
 
