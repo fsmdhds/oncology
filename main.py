@@ -66,7 +66,7 @@ def check_password():
         return True
 
    
-st.set_page_config(page_title='AAN feedback for AI Tools', layout = 'centered', page_icon = ':stethoscope:', initial_sidebar_state = 'auto')    
+st.set_page_config(page_title='Oncology feedback for AI Tools', layout = 'centered', page_icon = ':dna:', initial_sidebar_state = 'auto')    
 title1, title2 = st.columns([1, 3])
 
 with title1:
@@ -74,9 +74,10 @@ with title1:
     medimate_robot = Image.open('static/medimate_robot.png')
     st.image(medimate_robot, use_column_width=True)
     
-with title2:
+
         
-    st.title("AAN Feedback on Tools for Neurology")
+with title2:      
+    st.title("Oncology Feedback on Tools for Cancer Care")
 
     with st.expander('About MediMate - Important Disclaimer'):
         st.write("Author: David Liebovitz, MD, Northwestern University")
@@ -89,13 +90,13 @@ with title2:
 if st.secrets["use_docker"] == "True" or check_password():
     st.warning("""Thank you for trying out our various use cases! Large language models (LLMs) hallucinate. This is particularly a concern in any healthcare context. Here, early methods
            to mitigate this are used including [CoVE](https://arxiv.org/abs/2309.11495) and grounding the final output with web content from reliable sites.
-           Explore the links listed in the sidebar and copied below for easier phone use.""")
+           Explore the links listed in the sidebar and copied below for easier phone use. Please note that the information provided is not a substitute for professional medical advice, diagnosis, or treatment.""")
     col1, col2, col3 = st.columns(3)
 
     with col2:
-        st.page_link("pages/🧠_Parkinson_Chat.py", label= "Parkinson's Chat", icon = "🧠")
+        st.page_link("pages/🧬_Cancer_Chat.py", label= "Cancer Chat", icon = "🧬")
         # st.page_link("pages/🧐_Interview_Practice.py", label = "Interview Practice", icon = "🧐")
-        st.page_link("pages/🗨️_Communication_and_DDx.py", label = "Communication and DDx", icon = "🗨️")
-        st.page_link("pages/👔_Interview_Practice.py", label = "Interview Practice", icon = "👔")
-        st.page_link("pages/👩🏾‍💻_My_AI_Team.py", label = "My AI Team", icon = "👩🏾‍💻")
-        st.page_link("pages/😞_Bias_Detection.py", label = "Bias Detection", icon = "😞")
+        st.page_link("pages/🗨️_Communication_and_Cancer_DDx.py", label = "Communication and Cancer DDx", icon = "🗨️")
+        st.page_link("pages/👔_Oncology_Interview_Practice.py", label = "Oncology Interview Practice", icon = "👔")
+        st.page_link("pages/👩🏾‍💻_My_Oncology_AI_Team.py", label = "My Oncology AI Team", icon = "👩🏾‍💻")
+        st.page_link("pages/😞_Bias_Detection_in_Oncology.py", label = "Bias Detection in Oncology", icon = "😞")
