@@ -10,10 +10,6 @@ from langchain_community.embeddings import OpenAIEmbeddings
 from prompts import rag_prompt, references_used
 from langchain.callbacks.streamlit import StreamlitCallbackHandler
 
-st.set_page_config(page_title='Cancer Chats', layout = 'centered', page_icon = "💬", initial_sidebar_state = 'auto')    
-
-st.set_page_config(page_title='Cancer Chats', layout = 'centered', page_icon = "💬", initial_sidebar_state = 'auto')    
-
 def check_password2():
     """Returns `True` if the user had the correct password."""
 
