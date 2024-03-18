@@ -561,7 +561,7 @@ if st.secrets["use_docker"] == "True" or check_password():
 
         
     if st.button("Improve my question!"):
-
+        client = OpenAI(api_key = st.secrets['OPENAI_API_KEY'])
         improved_question = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
