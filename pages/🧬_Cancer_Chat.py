@@ -96,4 +96,35 @@ if st.secrets["use_docker"] == "True" or check_password2():
         with st.spinner("Fomulating Answer..."):
 
             st.write(qa_chain(final_query)["result"])
-            # st.write(answer["result"])
+            # st.write(answer["result"])import streamlit as st
+from langchain_community.chat_models import ChatOpenAI
+
+# Set page config
+st.set_page_config(page_title="Cancer Chat", page_icon="🧬")
+
+# Title and introduction
+st.title("Cancer Chat")
+st.write("Welcome to the Cancer Chat! This tool is designed to provide information and support for oncology-related topics.")
+
+# Initialize the chat model
+chat_model = ChatOpenAI(model="gpt-4-turbo-preview")
+
+# Chat history
+if 'history' not in st.session_state:
+    st.session_state['history'] = []
+
+# User input
+user_input = st.text_input("Ask a question or start a conversation about cancer:")
+
+# Handle the conversation
+if user_input:
+    response = chat_model.chat(user_input, history=st.session_state['history'])
+    st.session_state['history'].append({"user": user_input, "assistant": response})
+
+    # Display the conversation
+    for exchange in st.session_state['history']:
+        st.write(f"Q: {exchange['user']}")
+        st.write(f"A: {exchange['assistant']}")
+
+    # Clear the input box after the response
+    st.session_state['user_input'] = ""
