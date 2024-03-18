@@ -222,6 +222,7 @@ Tell me about indapamide.
 Provide a detailed overview of indapamide, focusing on current best practices. Include its mechanism of action, indications, contraindications, common side effects, and essential considerations for prescribing or monitoring in patients. Structure the response in markdown with distinct sections for each category. Additionally, incorporate a table summarizing the side effects and contraindications. This format will aid in understanding and applying the information effectively.
 ```
 **Goal:** By enriching the original question with specifics that address likely follow-up inquiries and specifying an "optimal learning" format, you aim to craft an improved question that prompts a GPT model to deliver an answer that is both comprehensive and neatly organized. Return only the enhanced question, ready for an efficient and structured response from the GPT model.
+Return only the enhanced question, ensuring it is fully prepared for an effective and structured answering by the GPT model. No extra comments.
 """
 
 rag_prompt = """Given the specific context of {context}, utilize your retrieval capabilities to find the most 
