@@ -157,38 +157,15 @@ Take care, [Your Name] [Your Job (doctor, etc.)]"""
 report1 = """Summary of Findings: The MRI of the brain demonstrates a few nonspecific white matter hyperintensities that are mild and may be related to small vessel ischemic disease. There are no signs of acute pathology, significant mass effect, or abnormal contrast enhancement. These findings should be correlated clinically, considering the patient's age and symptoms. 
 Follow-up MRI may be warranted if symptoms persist or worsen to rule out progressive white matter disease."""
 
-report2 = """EEG Report
+report2 = """PET CT Report
+Impression:
 
-### Patient Information:
-**Name:** John Doe  
-**Age:** 30 years  
-**Date of EEG:** [Date]  
-**Referring Physician:** Dr. Jane Smith  
-**Indication for EEG:** Evaluation of episodic confusion and suspected seizure activity.
+Post-treatment PET CT demonstrates a significant reduction in the size and metabolic activity of previously noted lymphadenopathy in the cervical, mediastinal, axillary, and abdominal regions, consistent with a positive response to lymphoma treatment. The most prominent previously involved node, located in the mediastinum, has decreased from 3.5 cm to 1.2 cm in short-axis diameter, with a corresponding decrease in SUV from 12 to 2.5, indicating a substantial decrease in metabolic activity.
 
-### EEG Technique:
-The EEG was performed using a standard 10-20 system of electrode placement. The recording included photic stimulation and hyperventilation. The total recording time was 60 minutes, including awake, drowsy, and sleep stages.
+No new areas of abnormal metabolic activity suggestive of lymphoma involvement are identified elsewhere in the body. The spleen and liver show normal size and metabolic activity, with no evidence of disease involvement. The bone marrow demonstrates a homogeneous pattern of uptake without focal lesions, suggesting no bone marrow involvement at this time.
 
-### Background Activity:
-The background activity consists of a normal alpha rhythm at 8-10 Hz, predominant in the posterior regions and reactive to eye opening. Intermittent theta activity is observed in the temporal regions, which is normal for drowsiness and light sleep stages.
-
-### Episodic Activity/Abnormalities:
-- **Generalized Spike-and-Wave Discharges:** No generalized spike-and-wave discharges were observed.
-- **Focal Abnormalities:** There were intermittent sharp waves and spikes noted in the left temporal lobe, more prominent during drowsiness. These findings suggest focal irritability.
-- **Photic Stimulation:** No significant response to photic stimulation, indicating no photosensitivity.
-- **Hyperventilation:** No significant changes were induced by hyperventilation.
-
-### Impression:
-This EEG demonstrates intermittent sharp waves and spikes in the left temporal region, which may be indicative of focal epileptogenic activity, particularly given the clinical context of episodic confusion. There are no signs of generalized seizure activity. The background rhythm is otherwise normal, with appropriate reactivity. These findings should be correlated with the clinical picture and, if necessary, further evaluated with additional diagnostic modalities such as an MRI of the brain or long-term video-EEG monitoring to better characterize the nature of the episodes and to guide treatment options.
-
-### Recommendations:
-- Consider correlation with clinical symptoms and history.
-- MRI of the brain to exclude structural abnormalities contributing to focal epileptogenic activity.
-- Consideration for long-term video-EEG monitoring for a more definitive characterization of episodic events and to guide management.
-
-This impression is intended to provide an overview of the EEG findings and should be interpreted in conjunction with the patient's clinical history and other diagnostic studies.
+Impression: The findings are suggestive of a good response to therapy in a patient with lymphoma, with significant reduction in size and metabolic activity of previously involved lymph nodes. No evidence of new disease. Continued surveillance with follow-up PET CT scans is recommended to monitor for potential recurrence. Clinical correlation and consultation with the oncology team are advised to determine the need for any further treatment or intervention.
 """
-
 
 ddx_prefix = """You apply the knowledge and wisdom of an expert diagnostician emphasizing neurology expertise (other areas are very good, too) to generate a differential diagnosis 
 based on the patient context provided. You always reason step by step to ensure accuracy and precision in your responses. 

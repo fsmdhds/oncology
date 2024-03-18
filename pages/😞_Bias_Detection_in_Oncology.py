@@ -273,7 +273,7 @@ if st.secrets["use_docker"] == "True" or check_password():
     if task == "Generate a sample note and check for bias":
         st.sidebar.warning("This is an EARLY PHASE TOOL undergoing significant updates soon. Eventually, it will generate biased yet realistic note examples for us all to learn from.")    
         st.warning("Enter details into the sidebar on the left and use the buttons to generate response")
-        desired_note_content = st.sidebar.text_input("Please enter a specialty and diagnoses for your generated progress note:", value="Neurology: Migraine")
+        desired_note_content = st.sidebar.text_input("Please enter a specialty and diagnoses for your generated progress note:", value="Oncology: Lymphoma")
         patient_attributes = st.sidebar.text_input("Please enter one or more patient attributes you would like to use for your note:", value="Patient is a 45 year old white female")
         desired_note_bias = st.sidebar.text_input("Please enter one or more biases you would like to insert within your sample note: ", value="Racial bias, Age bias, gender bias")
         desired_note_prompt = desired_note_prompt.format(desired_note_content=desired_note_content, patient_attributes = patient_attributes, desired_note_bias=desired_note_bias)

@@ -380,6 +380,7 @@ def reconcile(question, model, old, new, web_content, reconcile_prompt):
     openai.api_base = "https://api.openai.com/v1/"
     openai.api_key = config['OPENAI_API_KEY']
     # truncated_web_content = truncate_after_n_words(web_content, 10000)
+    client = OpenAI(api_key = st.secrets["OPENAI_API_KEY"])        
     try:
         response = client.chat.completions.create(
             model= model,
@@ -405,10 +406,10 @@ def answer_using_prefix(prefix, sample_question, sample_answer, my_ask, temperat
         model = "gpt-3.5-turbo-16k"
     if model == "openai/gpt-4":
         model = "gpt-4"
-    if model== "openai/gpt-4-turbo-preview":
-        model = "gpt-4-turbo-preview"
     if model == "openai/gpt-4-1106-preview":
         model = "gpt-4-1106-preview"
+    if model == "openai/gpt-4-turbo-preview":
+        model = "gpt-4-turbo-preview"
     if history_context == None:
         history_context = ""
     messages = [{'role': 'system', 'content': prefix},
@@ -416,9 +417,7 @@ def answer_using_prefix(prefix, sample_question, sample_answer, my_ask, temperat
             {'role': 'assistant', 'content': sample_answer},
             {'role': 'user', 'content': history_context + my_ask},]
     if model == "gpt-4" or model == "gpt-3.5-turbo" or model == "gpt-3.5-turbo-16k" or model == "gpt-4-1106-preview" or model == "gpt-3.5-turbo-1106" or model == "gpt-4-turbo-preview":
-        openai.api_base = "https://api.openai.com/v1/"
-        openai.api_key = config['OPENAI_API_KEY']
-        client = OpenAI(api_key = st.secrets['OPENAI_API_KEY'])
+        client = OpenAI(api_key = st.secrets["OPENAI_API_KEY"])
         response = client.chat.completions.create(
             model = model,
             messages = messages,
@@ -561,7 +560,7 @@ if st.secrets["use_docker"] == "True" or check_password():
 
         
     if st.button("Improve my question!"):
-
+        client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
         improved_question = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
