@@ -12,6 +12,8 @@ from langchain.callbacks.streamlit import StreamlitCallbackHandler
 
 st.set_page_config(page_title='Cancer Chats', layout = 'centered', page_icon = "💬", initial_sidebar_state = 'auto')    
 
+st.set_page_config(page_title='Cancer Chats', layout = 'centered', page_icon = "💬", initial_sidebar_state = 'auto')    
+
 def check_password2():
     """Returns `True` if the user had the correct password."""
 
@@ -99,8 +101,7 @@ if st.secrets["use_docker"] == "True" or check_password2():
             # st.write(answer["result"])import streamlit as st
 from langchain_community.chat_models import ChatOpenAI
 
-# Set page config
-st.set_page_config(page_title="Cancer Chat", page_icon="🧬")
+# from langchain.vectorstores import FAISS
 
 # Title and introduction
 st.title("Cancer Chat")
