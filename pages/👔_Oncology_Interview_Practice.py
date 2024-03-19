@@ -9,7 +9,7 @@ from langchain.prompts import PromptTemplate
 from audio_recorder_streamlit import audio_recorder
 import streamlit as st
 from collections import defaultdict
-from prompts import *
+from extract_prompts import *
 import tempfile
 import requests
 import json

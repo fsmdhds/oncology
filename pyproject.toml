@@ -23,6 +23,7 @@ faiss-cpu = "^1.7.4"
 langchain-openai = "^0.0.8"
 requests = "^2.31.0"
 llama-index = "^0.10.20"
+instructor = "^0.6.4"
 
 [tool.poetry.group.dev.dependencies]
 streamlit = "^1.31.1"
