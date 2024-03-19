@@ -2,11 +2,13 @@ import streamlit as st
 # from langchain.vectorstores import FAISS
 from langchain_community.vectorstores import FAISS
 # from langchain.llms import OpenAI
-from langchain.chat_models import ChatOpenAI
+# from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 # from langchain.chains import VectorDBQA
 from langchain.chains import RetrievalQA
 # from langchain.embeddings import OpenAIEmbeddings
-from langchain_community.embeddings import OpenAIEmbeddings
+# from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from prompts import rag_prompt, references_used
 from langchain.callbacks.streamlit import StreamlitCallbackHandler
 

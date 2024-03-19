@@ -1,53 +1,29 @@
-
+from langchain.chains import LLMChain
+from langchain.llms import OpenAI
+# from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
+from langchain.memory import ConversationBufferMemory
+# from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
+from langchain_community.chat_message_histories import StreamlitChatMessageHistory
+from langchain.prompts import PromptTemplate
+from audio_recorder_streamlit import audio_recorder
+import streamlit as st
+from collections import defaultdict
+from prompts import *
+import tempfile
+import requests
+import json
+import base64
 import openai
-
-# Importing required libraries and modules                                              
-import base64                                                                           
-import json                                                                             
-import os                                                                               
-import re                                                                               
-import requests                                                                         
-import streamlit as st                                                                  
-import tempfile                                                                         
-from audio_recorder_streamlit import audio_recorder                                     
-from collections import defaultdict                                                     
-from elevenlabs import clone, generate, play, set_api_key, stream                       
-from langchain.chains import LLMChain                                                   
-from langchain.memory import ConversationBufferMemory                                   
-from langchain.prompts import PromptTemplate                                            
-from langchain_community.chat_message_histories import StreamlitChatMessageHistory      
-# from langchain_community.llms import OpenAI                                             
-from langchain_openai import ChatOpenAI                                                 
-from openai import OpenAI                                                               
-from pathlib import Path                                                                
-from prompts import *                                                                   
-from using_docker import using_docker                                                   
-                                                                                    
-# Creating an OpenAI client                                                             
-client = OpenAI()  
-
+import os
+import re
+# from elevenlabs import clone, generate, play, set_api_key, stream
+from using_docker import using_docker
 
 
 
 st.set_page_config(page_title="Interview Practice!", page_icon="🧐")
 st.title("🧐 Interview Practice")
-
-def convert_messages_to_json(messages):
-    return [{"role": msg.type, "content": msg.content} for msg in messages]
-
-def generate_feedback(prompt = interview_feedback, conversation = '', model = "gpt-3.5-turbo"):
-    # client = OpenAI()
-    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-    messages = [{"role": "system", "content": prompt},
-                {"role": "user", "content": f'Transcript for user feedback: {conversation}'}
-                ]
-    feedback_response = client.chat.completions.create(
-        model=model,
-        messages=messages,
-        stream=False,
-        )
-    feedback_str = feedback_response.choices[0].message.content
-    return feedback_str
 
 def talk_stream(model, voice, input):
     api_key = st.secrets["OPENAI_API_KEY"]
@@ -225,11 +201,11 @@ if "audio_input" not in st.session_state:
 if "last_response_interview" not in st.session_state:
     st.session_state["last_response_interview"] = "Hi, I'm Dr. Smith! Nice to meet you!"
 
-if st.secrets["use_docker"] == "True" or check_password2():
-    st.info("Have fun. Enter responses at the bottom of the page or choose the Microphone option. This tool uses openai's GPT3.5 turbo model and illustrates voice interactions from language models.")
+if check_password2():
+    st.info("Have fun. Enter responses at the bottom of the page or choose the Microphone option. This tool uses openai's GPT3.5 turbo 16k model.")
     system_context = st.radio("Select an interviewer type :", ("Tough", "Nice",), horizontal = True, index=0)
-    area = st.text_input("Enter the clinical area for the position of interest", placeholder="e.g. General Neurology, Stroke, etc.")
-    role = st.text_input("Enter the position desired (faculty or staff roles; clinical or business)", placeholder="e.g. Attending Neurologist, Epileptologist, Research Professor, Business Administrator, etc. ")
+    specialty = st.text_input("Enter your sought specialty area", placeholder="e.g. Hematologic Malignancies")
+    position = st.text_input("Enter your sought position", placeholder="e.g. resident, faculty, administrator")
     
     
 
@@ -242,13 +218,13 @@ if st.secrets["use_docker"] == "True" or check_password2():
         template = nice_interviewer
         voice = 'shimmer'
         
-    if st.button("Set the Scenario"):
+    if st.button("Set a Scenario"):
         clear_session_state_except_password_correct()
         st.session_state["last_response_interview"] = "Hi, I'm Dr. Smith! Nice to meet you!"
     
     
-    if area is not None and role is not None:
-        formatted_template = template.format(specialty=area, position=role, history = "{history}", human_input = "{human_input}")
+    if specialty is not None and position is not None:
+        formatted_template = template.format(specialty=specialty, position=position, history = "{history}", human_input = "{human_input}")
         # st.write(f'{formatted_template}')    
 
 
@@ -271,15 +247,14 @@ if st.secrets["use_docker"] == "True" or check_password2():
         st.info("Enter an OpenAI API Key to continue")
         st.stop()
 
-    with st.sidebar:
-        input_source = st.radio("Input source", ("Text", "Microphone"), index=0)
-        st.session_state.audio_off = st.checkbox("Turn off voice generation", value=False) 
+    input_source = st.radio("Input source", ("Text", "Microphone"), index=0)
+    st.session_state.audio_off = st.checkbox("Turn off voice generation", value=False) 
 
 
 
 
     prompt = PromptTemplate(input_variables=["history", "human_input"], template=formatted_template)
-    llm_chain = LLMChain(llm=ChatOpenAI(openai_api_key=openai_api_key, model = "gpt-3.5-turbo"), prompt=prompt, memory=memory)
+    llm_chain = LLMChain(llm=ChatOpenAI(openai_api_key=openai_api_key, model = "gpt-3.5-turbo-1106"), prompt=prompt, memory=memory)
 
     # Render current messages from StreamlitChatMessageHistory
     for msg in msgs_interview.messages:
@@ -324,20 +299,6 @@ if st.secrets["use_docker"] == "True" or check_password2():
             st.session_state.last_response_interview = response
             st.chat_message("assistant").write(response)
 
-    provide_interview_feedback = st.sidebar.button("Provide Feedback")
-    if provide_interview_feedback:
-        str_memory = str(memory)
-        transcript = "\n\n".join([f"{msg.type}: {msg.content}" for msg in msgs_interview.messages])
-        feedback = generate_feedback(conversation = transcript)
-        with st.sidebar:
-            # transcript = "\n".join([f"{msg.type}: {msg.content}" for msg in msgs_interview.messages])
-            # st.write(transcript)
-            with st.expander("Transcript"):
-                st.write(transcript)
-            st.write(feedback)
-            talk_stream("tts-1", voice, feedback)
-            autoplay_local_audio("last_interviewer.mp3")
-    
     clear_memory = st.sidebar.button("Start Over")
     if clear_memory:
         # st.session_state.langchain_messages = []
@@ -386,6 +347,5 @@ if st.secrets["use_docker"] == "True" or check_password2():
             # Print the response
             # link_to_audio = extract_url(response_from_audio.text)
             # st.write(path_audio)
-            with st.sidebar:
-                autoplay_local_audio("last_interviewer.mp3")
+            autoplay_local_audio("last_interviewer.mp3")
     

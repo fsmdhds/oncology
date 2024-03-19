@@ -222,8 +222,9 @@ Tell me about indapamide.
 Provide a detailed overview of indapamide, focusing on current best practices. Include its mechanism of action, indications, contraindications, common side effects, and essential considerations for prescribing or monitoring in patients. Structure the response in markdown with distinct sections for each category. Additionally, incorporate a table summarizing the side effects and contraindications. This format will aid in understanding and applying the information effectively.
 ```
 **Goal:** By enriching the original question with specifics that address likely follow-up inquiries and specifying an "optimal learning" format, you aim to craft an improved question that prompts a GPT model to deliver an answer that is both comprehensive and neatly organized. Return only the enhanced question, ready for an efficient and structured response from the GPT model.
-"""
 
+**Final Critical Note** Return only the text for the improved question. No additional comments, delimiters or other text should be included.
+"""
 rag_prompt = """Given the specific context of {context}, utilize your retrieval capabilities to find the most 
 relevant information that aligns with this context. Then, generate a response to the following question: {question}. Aim to provide a comprehensive, accurate, and contextually appropriate answer, leveraging both the retrieved information and your generative capabilities. Your response should prioritize relevance to the provided context, ensuring it addresses the user's inquiry effectively and succinctly.
 """
