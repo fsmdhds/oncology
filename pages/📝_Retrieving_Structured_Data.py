@@ -373,7 +373,7 @@ schema3 = {
 }
 
 
-if check_password():
+if st.secrets["use_docker"] == "True" or check_password():
 
     if 'history' not in st.session_state:
                 st.session_state.history = []

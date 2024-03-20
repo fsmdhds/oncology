@@ -14,7 +14,7 @@ from llama_index.llms.openai import OpenAI as llamaOpenAI
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, ServiceContext
 from llama_index.core import Document
 # from st_copy_to_clipboard import st_copy_to_clipboard
-from prompts import *
+from ai_team_prompts import *
 import markdown2
  
 

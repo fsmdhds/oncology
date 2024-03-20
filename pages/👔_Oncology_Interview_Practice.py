@@ -201,7 +201,7 @@ if "audio_input" not in st.session_state:
 if "last_response_interview" not in st.session_state:
     st.session_state["last_response_interview"] = "Hi, I'm Dr. Smith! Nice to meet you!"
 
-if check_password2():
+if st.secrets["use_docker"] == "True" or check_password2():
     st.info("Have fun. Enter responses at the bottom of the page or choose the Microphone option. This tool uses openai's GPT3.5 turbo 16k model.")
     system_context = st.radio("Select an interviewer type :", ("Tough", "Nice",), horizontal = True, index=0)
     specialty = st.text_input("Enter your sought specialty area", placeholder="e.g. Hematologic Malignancies")
