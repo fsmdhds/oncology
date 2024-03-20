@@ -759,7 +759,7 @@ if st.secrets["use_docker"] == "True" or check_password():
         final_answer = reconcile(st.session_state.final_question, model3, f'A {model1} response was:\n\n{st.session_state.model1_response}', f'A {model2} response was:\n\n{st.session_state.model2_response}', f'Information from the web was:\n\n{web_addition}', updated_reconcile_prompt)
         st.session_state.final_response = f'{st.session_state.final_question}\n\nFinal Response from {model3}\n\n{final_answer}'
         st.markdown(final_answer)
-        html = markdown2.markdown(final_answer)
+        html = markdown2.markdown(final_answer,  extras=["tables"])
         st.download_button('Download Reconciled Response', html, f'final_response.html', 'text/html')
     
     with st.sidebar:
@@ -798,7 +798,7 @@ if st.secrets["use_docker"] == "True" or check_password():
                 convo_str = ''
                 convo_str = "\n\n________\n\n________\n\n".join(st.session_state.thread)
                 st.markdown(convo_str)
-                html = markdown2.markdown(convo_str)
+                html = markdown2.markdown(convo_str,  extras=["tables"])
                 st.download_button('Download Conversation Record', html, f'convo.html', 'text/html')
 
                     
@@ -845,6 +845,6 @@ if st.secrets["use_docker"] == "True" or check_password():
                     stream=True,
                 )
                 response = st.write_stream(stream)
-                html = markdown2.markdown(response)
+                html = markdown2.markdown(response,  extras=["tables"])
                 st.download_button('Download Followup Response', html, f'followup_response.html', 'text/html')
             st.session_state.messages.append({"role": "assistant", "content": response})
