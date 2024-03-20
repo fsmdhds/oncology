@@ -13,7 +13,9 @@ from openai import OpenAI  # For direct use of the OpenAI class
 from llama_index.llms.openai import OpenAI as llamaOpenAI
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, ServiceContext
 from llama_index.core import Document
-from ai_team_prompts import *
+# from st_copy_to_clipboard import st_copy_to_clipboard
+from prompts import *
+import markdown2
  
 
 st.set_page_config(page_title='My AI Team', layout = 'centered', page_icon = ':stethoscope:', initial_sidebar_state = 'auto')
@@ -380,7 +382,6 @@ def reconcile(question, model, old, new, web_content, reconcile_prompt):
     openai.api_base = "https://api.openai.com/v1/"
     openai.api_key = config['OPENAI_API_KEY']
     # truncated_web_content = truncate_after_n_words(web_content, 10000)
-    client = OpenAI(api_key = st.secrets["OPENAI_API_KEY"])        
     try:
         response = client.chat.completions.create(
             model= model,
@@ -417,7 +418,9 @@ def answer_using_prefix(prefix, sample_question, sample_answer, my_ask, temperat
             {'role': 'assistant', 'content': sample_answer},
             {'role': 'user', 'content': history_context + my_ask},]
     if model == "gpt-4" or model == "gpt-3.5-turbo" or model == "gpt-3.5-turbo-16k" or model == "gpt-4-1106-preview" or model == "gpt-3.5-turbo-1106" or model == "gpt-4-turbo-preview":
-        client = OpenAI(api_key = st.secrets["OPENAI_API_KEY"])
+        openai.api_base = "https://api.openai.com/v1/"
+        openai.api_key = config['OPENAI_API_KEY']
+        client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
         response = client.chat.completions.create(
             model = model,
             messages = messages,
@@ -560,7 +563,7 @@ if st.secrets["use_docker"] == "True" or check_password():
 
         
     if st.button("Improve my question!"):
-        client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
         improved_question = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -572,7 +575,7 @@ if st.secrets["use_docker"] == "True" or check_password():
         st.session_state["improved_question"] = improved_question.choices[0].message.content
     # Display the response from the API.
     if st.session_state.improved_question:
-        with st.expander("Open to view/edit an enhanced version of your question for use with GPTs."):
+        with st.expander("Review and edit the enhanced version of your question prior to sending.", expanded=True):
             st.text_area("Improved Question - edit below as needed. If editing, hit your CMD (or CTRL) + *return* key when done editing", st.session_state.improved_question, height=150, key="improved_question_text_area")
     col1, col2 = st.columns(2)
     with col1:
@@ -691,11 +694,11 @@ if st.secrets["use_docker"] == "True" or check_password():
         st.session_state.model2_response = model2_final
 
         with st.expander(f'Model 1 Response'):
-            st.write(st.session_state.model1_response)
+            st.markdown(st.session_state.model1_response)
             
 
         with st.expander(f"Model 2 Response"):
-            st.write(st.session_state.model2_response)
+            st.markdown(st.session_state.model2_response)
             
         if use_snippets and only_links == False:
             with st.expander(f"Web Snippets Sent to the LLM:"):
@@ -728,7 +731,7 @@ if st.secrets["use_docker"] == "True" or check_password():
                     for url in urls:
                         st.write(url)
                     st.write("Here is the answer according to the RAG processed web content:")    
-                    st.write(response.response)
+                    st.markdown(response.response)
                     st.session_state.ebm = response.response
                     
         if only_links:
@@ -754,7 +757,9 @@ if st.secrets["use_docker"] == "True" or check_password():
 
         final_answer = reconcile(st.session_state.final_question, model3, f'A {model1} response was:\n\n{st.session_state.model1_response}', f'A {model2} response was:\n\n{st.session_state.model2_response}', f'Information from the web was:\n\n{web_addition}', updated_reconcile_prompt)
         st.session_state.final_response = f'{st.session_state.final_question}\n\nFinal Response from {model3}\n\n{final_answer}'
-        st.write(final_answer)
+        st.markdown(final_answer)
+        html = markdown2.markdown(final_answer)
+        st.download_button('Download Reconciled Response', html, f'final_response.html', 'text/html')
     
     with st.sidebar:
         st.header('Download and View Last Reponses')
@@ -791,8 +796,12 @@ if st.secrets["use_docker"] == "True" or check_password():
             with st.expander(f"Saved Record of Consensus Responses"):
                 convo_str = ''
                 convo_str = "\n\n________\n\n________\n\n".join(st.session_state.thread)
-                st.write(convo_str)
-                st.download_button('Download Conversation Record', convo_str, f'convo.txt', 'text/txt')
+                st.markdown(convo_str)
+                html = markdown2.markdown(convo_str)
+                st.download_button('Download Conversation Record', html, f'convo.html', 'text/html')
+
+                    
+
                 
 
     
@@ -835,4 +844,6 @@ if st.secrets["use_docker"] == "True" or check_password():
                     stream=True,
                 )
                 response = st.write_stream(stream)
+                html = markdown2.markdown(response)
+                st.download_button('Download Followup Response', html, f'followup_response.html', 'text/html')
             st.session_state.messages.append({"role": "assistant", "content": response})
