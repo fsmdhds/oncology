@@ -481,7 +481,7 @@ def check_password():
 
 
 
-st.title("My AI Team")
+st.title("👩🏾‍💻 My AI Team")
 with st.expander("Please read before using"):
     st.write("This app is a demonstration of consensus approaches to answering clinical questions using AI. It is not intended for direct clinical use. Always validate answers independently before using them in clinical practice. This app is for educational purposes only.")
     st.info("You may use default settings or modify them by selecting the models on the left sidebar that you would like to use to answer your question. The first two models will be used to generate answers, and the third model will be used to reconcile the two answers and any web search results.")

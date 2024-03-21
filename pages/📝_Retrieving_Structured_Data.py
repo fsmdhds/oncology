@@ -389,6 +389,9 @@ if st.secrets["use_docker"] == "True" or check_password():
 
     st.set_page_config(page_title='Oncology Parser Assistant', layout = 'centered', page_icon = ':stethoscope:', initial_sidebar_state = 'auto')
     st.title("📝 Oncology Parser Assistant")
+    st.warning("""Who likes extra EHR clicks? What if AI could recognize all concepts and file them where they belong in the chart? This tool illustrates
+               progress in that direction with a variety of methods. Soon, one or more will meet muster for research or clinical use!""")
+   
     disclaimer = """**Disclaimer:** This is a tool to assist chart abstraction for cancer related diagnoses. \n 
 2. This tool is not a real doctor. \n    
 3. You will not take any medical action based on the output of this tool. \n   
