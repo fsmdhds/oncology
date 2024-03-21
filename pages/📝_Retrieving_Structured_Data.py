@@ -156,7 +156,7 @@ def answer_using_prefix(prefix, sample_question, sample_answer, my_ask, temperat
     # # st.write(full_answer)
     #     st.session_state.copied_note = full_answer
     sample_note = completion.choices[0].message.content
-    return  st.write(sample_note) # Change how you access the message content
+    return sample_note # Change how you access the message content
 
 def check_password():
     """Returns `True` if the user had the correct password."""
@@ -388,8 +388,7 @@ if st.secrets["use_docker"] == "True" or check_password():
     # Define Streamlit app layout
 
     st.set_page_config(page_title='Oncology Parser Assistant', layout = 'centered', page_icon = ':stethoscope:', initial_sidebar_state = 'auto')
-    st.title("Oncology Parser Assistant")
-    st.write("ALPHA version 0.2")
+    st.title("📝 Oncology Parser Assistant")
     disclaimer = """**Disclaimer:** This is a tool to assist chart abstraction for cancer related diagnoses. \n 
 2. This tool is not a real doctor. \n    
 3. You will not take any medical action based on the output of this tool. \n   
@@ -399,20 +398,18 @@ if st.secrets["use_docker"] == "True" or check_password():
     with st.expander('About Oncology Parser - Important Disclaimer'):
         st.write("Author: David Liebovitz, MD, Northwestern University")
         st.info(disclaimer)
-        st.write("Last updated 6/21/23")
+        selected_model = st.selectbox("Pick your GPT model:", ("GPT-3.5", "GPT-4"))
         
-    selected_model = st.selectbox("Pick your GPT model:", ("GPT-3.5-turbo-16k ($$)","GPT-3.5 ($)", "GPT-4 ($$$$)"))
-    if selected_model == "GPT-3.5 ($)":
+        
+    
+    if selected_model == "GPT-3.5":
         model = "gpt-3.5-turbo"
         st.session_state.model = model
-    elif selected_model == "GPT-4 ($$$$)":
-        model = "gpt-4"
-        st.session_state.model = model
-    elif selected_model == "GPT-3.5-turbo-16k ($$)":
-        model = "gpt-3.5-turbo-16k"
+    elif selected_model == "GPT-4":
+        model = "gpt-4-turbo-preview"
         st.session_state.model = model
  
-    st.info("📚 Let AI identify structured content from notes!" )
+    # st.info("📚 Let AI identify structured content from notes!" )
     schema_choice = st.sidebar.radio("Pick your extraction schema:", ("Schema 1", "Schema 2", "Schema 3", "Method 2", "Method 3"))
     # st.markdown('[Sample Oncology Notes](https://www.medicaltranscriptionsamplereports.com/hepatocellular-carcinoma-discharge-summary-sample/)')
     parse_prompt  = """You will be provided with unstructured text about a patient, and your task is to find all information related to any cancer 
@@ -495,6 +492,7 @@ if st.secrets["use_docker"] == "True" or check_password():
       sample_prompt = f"Generate a progress note for a patient with {cancer_diagnosis}."
       if st.button("Generate a sample note"):
         generated_note = answer_using_prefix(prefix, sample_prompt, sample_response, sample_prompt, temperature = 0.4, history_context = "", )
+        st.markdown(generated_note)
         st.session_state.copied_note = generated_note
     
     if test_or_use == "Paste content":
@@ -520,7 +518,8 @@ if st.secrets["use_docker"] == "True" or check_password():
         
         elif schema_choice == "Method 2":
             try:
-                response= openai.ChatCompletion.create(
+                client = OpenAI(api_key = st.secrets["OPENAI_API_KEY"])
+                response= client.chat.completions.create(
                 model= model,
                 messages=[
                     {"role": "system", "content": parse_prompt},
